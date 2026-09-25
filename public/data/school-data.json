@@ -1,0 +1,41 @@
+{
+  "name": "Szkoła Jazdy Kołobrzeg",
+  "shortName": "Szkoła Jazdy",
+  "city": "Kołobrzeg",
+  "phone": "+48 573 219 230",
+  "phoneRaw": "+48573219230",
+  "email": "kontakt@szkolajazdy-kolobrzeg.pl",
+  "address": "ul. Armii Krajowej 12, 78-100 Kołobrzeg",
+  "navLinks": [
+    { "label": "Kategorie i Ceny", "href": "#kategorie" },
+    { "label": "Zapisz się / Wniosek", "href": "#zapisy" },
+    { "label": "Instruktorzy", "href": "#instruktorzy" },
+    { "label": "Kontakt", "href": "#kontakt" }
+  ],
+  "hero": {
+    "badge": "KOŁOBRZEG • SZKOŁA JAZDY NOWEJ GENERACJI",
+    "titleLine1": "NAUCZ SIĘ JEŹDZIĆ",
+    "titleLine2": "W 3 MIESIĄCE",
+    "description": "Już 15 lat zapewniamy najwyższej jakości lekcje jazdy, które kończy z sukcesem ponad 150 kursantów miesięcznie. Bezstresowo, z indywidualnym podejściem i nowoczesną flotą w Kołobrzegu.",
+    "ctaButton": "Zapisz się teraz",
+    "categoriesButton": {
+      "prefix": "Sprawdź",
+      "text": "kategorie i cennik"
+    },
+    "features": [
+      { "id": "costs", "text": "0% ukrytych kosztów" },
+      { "id": "installments", "text": "Raty 0% bez odsetek" },
+      { "id": "schedule", "text": "Jazdy 7 dni w tygodniu" }
+    ],
+    "video": {
+      "src": "/videos/szkola-jazdy.mp4",
+      "title": "Nowoczesna flota szkoleniowa",
+      "stats": {
+        "passRate": "98.4%",
+        "passRateLabel": "ZDAWALNOŚĆ WORD",
+        "fleetTitle": "Flota 2024",
+        "fleetSubtitle": "IDENTYCZNA Z EGZAMINEM"
+      }
+    }
+  }
+}

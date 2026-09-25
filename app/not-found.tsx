@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Home, Wallet, ShieldAlert, Compass, Phone } from "lucide-react";
+import { Home, ShieldAlert, Compass, Phone } from "lucide-react";
 import WebGlBackground from "@/components/WebGlBackground";
 
 export const metadata: Metadata = {
