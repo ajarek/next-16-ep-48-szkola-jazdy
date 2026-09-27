@@ -1,0 +1,102 @@
+{
+  "sectionTitle": "Wyniki, które mówią same za siebie",
+  "sectionSubtitle": "Dlaczego mieszkańcy Kołobrzegu i okolic wybierają naszą szkołę jazdy",
+  "stats": [
+    {
+      "id": "experience",
+      "icon": "Calendar",
+      "badge": "Lider Regionu",
+      "badgeVariant": "blue",
+      "value": "15+",
+      "numericValue": 15,
+      "suffix": "+",
+      "title": "Lat Doświadczenia",
+      "description": "Nieprzerwanie na rynku od 2009 roku w Kołobrzegu.",
+      "accentColor": "blue",
+      "highlight": "Od 2009 r.",
+      "ariaLabel": "15 plus lat doświadczenia na rynku w Kołobrzegu"
+    },
+    {
+      "id": "graduates",
+      "icon": "Users",
+      "badge": "Absolwenci",
+      "badgeVariant": "cyan",
+      "value": "12 000+",
+      "numericValue": 12000,
+      "suffix": "+",
+      "title": "Zadowolonych Kierowców",
+      "description": "Kierowcy samochodów osobowych i zawodowych.",
+      "accentColor": "cyan",
+      "highlight": "Kat. B, A, C, C+E",
+      "ariaLabel": "Ponad 12 000 zadowolonych kierowców samochodów osobowych i zawodowych"
+    },
+    {
+      "id": "students-monthly",
+      "icon": "TrendingUp",
+      "badge": "Miesięcznie",
+      "badgeVariant": "indigo",
+      "value": "150+",
+      "numericValue": 150,
+      "suffix": "+",
+      "title": "Nowych Kursantów",
+      "description": "Płynne terminy, bez czekania miesiącami na jazdy.",
+      "accentColor": "indigo",
+      "highlight": "Bez kolejek",
+      "ariaLabel": "Ponad 150 nowych kursantów każdego miesiąca"
+    },
+    {
+      "id": "pass-rate",
+      "icon": "BadgeCheck",
+      "badge": "Oficjalny WORD",
+      "badgeVariant": "teal",
+      "value": "98.4%",
+      "numericValue": 98.4,
+      "suffix": "%",
+      "title": "Zdawalność Teorii",
+      "description": "Praktyka za pierwszym razem znacznie powyżej średniej.",
+      "accentColor": "teal",
+      "highlight": "1. miejsce w regionie",
+      "ariaLabel": "98.4 procent zdawalności teorii według oficjalnych danych WORD"
+    }
+  ],
+  "socialProof": {
+    "googleRating": 4.9,
+    "totalReviews": 486,
+    "reviewSource": "Google Reviews",
+    "studentsCounterText": "Ponad 12 000 absolwentów zdało egzamin państwowy",
+    "trustBadges": [
+      "Certyfikowany OSK Kołobrzeg",
+      "Pojazdy identyczne jak na egzaminie WORD",
+      "Instruktorzy z akredytacją państwową"
+    ],
+    "recentTestimonials": [
+      {
+        "id": "1",
+        "name": "Kacper Wiśniewski",
+        "category": "Kategoria B",
+        "result": "Zdane za 1. razem!",
+        "date": "2 dni temu",
+        "comment": "Super podejście i zero stresu na jazdach. Pan Tomasz nauczył mnie manewrów w Kołobrzegu tak, że egzamin w Koszalinie był czystą formalnością.",
+        "rating": 5
+      },
+      {
+        "id": "2",
+        "name": "Magdalena Kowalczyk",
+        "category": "Kategoria B (Automat)",
+        "result": "Zdane za 1. razem!",
+        "date": "W zeszłym tygodniu",
+        "comment": "Bałam się wsiąść za kółko po latach, a dzięki cierpliwości instruktora poczułam się w 100% pewnie na drodze. Polecam każdemu!",
+        "rating": 5
+      },
+      {
+        "id": "3",
+        "name": "Michał Szymański",
+        "category": "Kategoria C+E",
+        "result": "Zdane za 1. razem!",
+        "date": "2 tygodnie temu",
+        "comment": "Konkretnie, na temat i profesjonalnie. Nowe auta, idealny plac manewrowy. Kwalifikacja zawodowa i prawo jazdy bez żadnych przeszkód.",
+        "rating": 5
+      }
+    ]
+  }
+}

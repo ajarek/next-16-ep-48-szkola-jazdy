@@ -58,12 +58,12 @@ export default function HeroVideoPlayer({ videoSrc }: HeroVideoPlayerProps) {
     <div className="relative w-full group">
       {/* Efekt ambient glow za odtwarzaczem wideo */}
       <div
-        className="absolute -inset-2 rounded-[2rem] bg-gradient-to-tr from-blue-600/20 via-indigo-500/15 to-sky-400/20 blur-2xl -z-10 group-hover:from-blue-600/30 group-hover:to-sky-400/30 transition-all duration-500"
+        className="absolute -inset-2 rounded-[2rem] bg-linear-to-tr from-blue-600/20 via-indigo-500/15 to-sky-400/20 blur-2xl -z-10 group-hover:from-blue-600/30 group-hover:to-sky-400/30 transition-all duration-500"
         aria-hidden="true"
       />
 
       {/* Kontener główny wideo */}
-      <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xl aspect-[16/10] sm:aspect-[16/10] lg:aspect-[4/3] flex items-center justify-center">
+      <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-2xl aspect-16/10 sm:aspect-16/10 lg:aspect-4/3 flex items-center justify-center">
         {/* Element HTML5 Video */}
         <video
           ref={videoRef}
@@ -78,7 +78,7 @@ export default function HeroVideoPlayer({ videoSrc }: HeroVideoPlayerProps) {
 
         {/* Cień wewnętrzny i subtelny gradient dla czytelności odznak */}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20 pointer-events-none"
+          className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-black/20 pointer-events-none"
           aria-hidden="true"
         />
 
@@ -113,7 +113,7 @@ export default function HeroVideoPlayer({ videoSrc }: HeroVideoPlayerProps) {
         </div>
 
         {/* Pasek kontrolek na dole wideo z paskiem postępu */}
-        <div className="absolute bottom-0 inset-x-0 z-30 p-2 sm:p-3 bg-gradient-to-t from-black/80 to-transparent flex flex-col gap-1.5 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute bottom-0 inset-x-0 z-30 p-2 sm:p-3 bg-linear-to-t from-black/80 to-transparent flex flex-col gap-1.5 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           {/* Pasek postępu odtwarzania */}
           <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden">
             <div

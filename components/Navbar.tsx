@@ -55,7 +55,7 @@ export default function Navbar() {
           aria-label="Szkoła Jazdy - Strona główna"
         >
           {/* Nowoczesny logotyp z symbolem L i autem */}
-          <div className="relative flex items-center justify-center size-10 rounded-full bg-gradient-to-tr from-blue-700 to-blue-500 text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
+          <div className="relative flex items-center justify-center size-10 rounded-full bg-linear-to-tr from-blue-700 to-blue-500 text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
             <Car className="size-5.5" />
             <span className="absolute -top-1 -right-1 flex items-center justify-center size-4.5 rounded bg-blue-900 border border-white text-[10px] font-black tracking-tight text-white leading-none">
               L
@@ -131,7 +131,7 @@ export default function Navbar() {
     {/* MOBILNE WYSWUWANE MENU Z LEWEJ STRONY EKRANU - Umieszczone poza header dla czystego kontekstu warstw */}
     {/* Tło przyciemniające (Backdrop) */}
     <div
-      className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] transition-opacity duration-300 md:hidden ${
+      className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-90 transition-opacity duration-300 md:hidden ${
         isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       }`}
       onClick={() => setIsMobileMenuOpen(false)}
@@ -143,7 +143,7 @@ export default function Navbar() {
       role="dialog"
       aria-modal="true"
       aria-label="Menu mobilne"
-      className={`fixed inset-y-0 left-0 w-80 max-w-[85vw] bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 shadow-2xl z-[100] flex flex-col justify-between p-6 pb-10 transition-transform duration-300 ease-in-out md:hidden ${
+      className={`fixed inset-y-0 left-0 w-80 max-w-[85vw] bg-white dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 shadow-2xl z-100 flex flex-col justify-between p-6 pb-10 transition-transform duration-300 ease-in-out md:hidden ${
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -218,11 +218,11 @@ export default function Navbar() {
             onClick={toggleTheme}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-muted/60 text-foreground text-xs font-medium cursor-pointer"
           >
-            <span className="flex items-center gap-1.5 block dark:hidden">
+            <span className="flex items-center gap-1.5 dark:hidden">
               <Moon className="size-4 text-slate-700" />
               <span>Ciemny</span>
             </span>
-            <span className="flex items-center gap-1.5 hidden dark:flex">
+            <span className="items-center gap-1.5 hidden dark:flex">
               <Sun className="size-4 text-amber-400" />
               <span>Jasny</span>
             </span>
