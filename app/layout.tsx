@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { FloatingThemeToggle } from "@/components/FloatingThemeToggle";
 import WebGlBackground from "@/components/WebGlBackground";
+import Footer from "@/components/Footer";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -74,6 +75,9 @@ export default function RootLayout({
 
           {/* Główna treść strony */}
           <main className="flex-1 flex flex-col">{children}</main>
+
+          {/* Globalna stopka widoczna na wszystkich stronach */}
+          <Footer />
 
           {/* Pływający przycisk zmiany trybu jasny/ciemny w prawym dolnym rogu */}
           <FloatingThemeToggle />

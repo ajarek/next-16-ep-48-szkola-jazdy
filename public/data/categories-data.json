@@ -1,0 +1,145 @@
+{
+  "hero": {
+    "badge": "CENNIK 2025 • KOŁOBRZEG & WORD",
+    "titleLine1": "Wybierz swoją drogę",
+    "titleLine2": "do prawa jazdy",
+    "description": "Transparentne warunki, brak ukrytych kosztów paliwa oraz pojazdy w 100% zgodne ze specyfikacją egzaminacyjną WORD. Wybierz dogodną kategorię i rozpocznij szkolenie."
+  },
+  "filters": [
+    { "id": "all", "label": "Wszystkie kategorie" },
+    { "id": "passenger", "label": "Pojazdy osobowe (B)" },
+    { "id": "heavy", "label": "Ciężarowe & Przyczepy (C, C+E)" },
+    { "id": "bus", "label": "Autobusy / Zawodowe (D)" }
+  ],
+  "categories": [
+    {
+      "id": "b",
+      "code": "B",
+      "group": "passenger",
+      "badge": "Najpopularniejszy",
+      "badgeVariant": "blue",
+      "vehicle": "car",
+      "image": "/images/kategoria-b.svg",
+      "imageAlt": "Srebrny samochód osobowy Toyota Yaris używany do nauki jazdy kategorii B",
+      "price": 3500,
+      "installmentFrom": 290,
+      "theory": "2 m-ce",
+      "practice": "1,5 m-ca",
+      "features": [
+        "Pojazdy identyczne z WORD (Toyota Yaris)",
+        "Platforma e-learningowa 24/7 + testy",
+        "Badania lekarskie w siedzibie OSK"
+      ]
+    },
+    {
+      "id": "c",
+      "code": "C",
+      "group": "heavy",
+      "badge": "Zawodowe",
+      "badgeVariant": "slate",
+      "vehicle": "truck",
+      "image": "/images/kategoria-c.svg",
+      "imageAlt": "Biała ciężarówka MAN TGL używana do nauki jazdy kategorii C",
+      "price": 4700,
+      "installmentFrom": 390,
+      "theory": "3 m-ce",
+      "practice": "2 m-ce",
+      "features": [
+        "Pojazd szkoleniowy MAN TGL zgodny z WORD",
+        "Dostęp do kwalifikacji wstępnej (kod 95)",
+        "Zajęcia na nowoczesnym placu manewrowym"
+      ]
+    },
+    {
+      "id": "ce",
+      "code": "C+E",
+      "group": "heavy",
+      "badge": "Zawodowe",
+      "badgeVariant": "slate",
+      "ribbon": "BONUS -800 ZŁ",
+      "vehicle": "semi",
+      "image": "/images/kategoria-ce.svg",
+      "imageAlt": "Zestaw ciężarowy z naczepą używany do nauki jazdy kategorii C+E",
+      "price": 5100,
+      "installmentFrom": 425,
+      "theory": "3 m-ce",
+      "practice": "1,5 m-ca",
+      "features": [
+        "Zestaw tandem / naczepa z pneumatyką",
+        "Pakiet łączony C+CE: rabat 800 PLN",
+        "Precyzyjne manewrowanie pod rampę"
+      ]
+    },
+    {
+      "id": "d",
+      "code": "D",
+      "group": "bus",
+      "badge": "Pasażerskie",
+      "badgeVariant": "slate",
+      "vehicle": "bus",
+      "image": "/images/kategoria-d.svg",
+      "imageAlt": "Biały autokar szkoleniowy z automatyczną skrzynią biegów do nauki jazdy kategorii D",
+      "price": 5500,
+      "installmentFrom": 458,
+      "theory": "3 m-ce",
+      "practice": "2 m-ce",
+      "features": [
+        "Autokar szkoleniowy z automatyczną skrzynią",
+        "Zdawalność praktyczna 88% w pierwszym podejściu",
+        "Pewna praca w komunikacji miejskiej lub turystyce"
+      ]
+    }
+  ],
+  "included": {
+    "eyebrow": "Pełen pakiet bez ukrytych opłat",
+    "title": "Co zawiera każdy kurs w Szkole Jazdy?",
+    "description": "Inwestując w kurs w naszej szkole, otrzymujesz kompletne zaplecze dydaktyczne i techniczne. Nie ponosisz żadnych dopłat za paliwo czy egzamin wewnętrzny.",
+    "items": [
+      {
+        "id": "doctor",
+        "icon": "BriefcaseMedical",
+        "title": "Lekarz na miejscu",
+        "description": "Kompleksowe orzeczenie lekarskie i psychologiczne w naszej siedzibie."
+      },
+      {
+        "id": "exams",
+        "icon": "ClipboardCheck",
+        "title": "Egzaminy wewnętrzne",
+        "description": "Zarówno teoria jak i praktyka bez dodatkowych opłat za pierwsze podejście."
+      },
+      {
+        "id": "tests",
+        "icon": "Files",
+        "title": "Oficjalne testy PWPW",
+        "description": "100% autentyczna baza pytań identyczna jak na egzaminie państwowym."
+      },
+      {
+        "id": "routes",
+        "icon": "Route",
+        "title": "Trasy egzaminacyjne",
+        "description": "Intensywne jazdy po rejonach egzaminacyjnych Koszalina i Szczecina."
+      }
+    ],
+    "pkk": {
+      "question": "Masz już numer PKK z wydziału komunikacji?",
+      "cta": "Podaj PKK i rozpocznij od zaraz"
+    }
+  },
+  "financing": {
+    "eyebrow": "Finansowanie",
+    "badge": "Raty 0%",
+    "title": "Kalkulator rat szkolenia",
+    "description": "Dopasuj wygodną kwotę miesięczną. Bez bankowych odsetek, bezpośrednio w biurze Szkoły Jazdy.",
+    "minInstallments": 3,
+    "maxInstallments": 12,
+    "defaultInstallments": 6,
+    "ticks": [3, 6, 10, 12],
+    "defaultCategoryId": "b"
+  },
+  "help": {
+    "title": "Nie wiesz, którą kategorię wybrać?",
+    "description": "Nasi instruktorzy odpowiedzą na pytania odnośnie kwalifikacji, badań i procedury PKK w urzędzie.",
+    "callLabel": "Zadzwoń do nas",
+    "contactLabel": "Napisz do nas"
+  }
+}

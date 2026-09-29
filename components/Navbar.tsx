@@ -11,7 +11,7 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { label: "Kategorie i Ceny", href: "#kategorie" },
+  { label: "Kategorie i Ceny", href: "/categories" },
   { label: "Zapisz się / Wniosek", href: "#zapisy" },
   { label: "Instruktorzy", href: "#instruktorzy" },
   { label: "Kontakt", href: "#kontakt" },
