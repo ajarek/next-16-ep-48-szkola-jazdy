@@ -32,7 +32,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-border bg-slate-100 dark:bg-slate-900">
+    <footer className="mt-20 border-t border-border bg-white/85 dark:bg-slate-900/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Siatka 4 kolumn */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
