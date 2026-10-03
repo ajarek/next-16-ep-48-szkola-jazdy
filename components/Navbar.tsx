@@ -12,9 +12,9 @@ interface NavLink {
 
 const NAV_LINKS: NavLink[] = [
   { label: "Kategorie i Ceny", href: "/categories" },
-  { label: "Zapisz się / Wniosek", href: "#zapisy" },
-  { label: "Instruktorzy", href: "#instruktorzy" },
-  { label: "Kontakt", href: "#kontakt" },
+  { label: "Zapisz się / Wniosek", href: "/application" },
+  { label: "Instruktorzy", href: "/#instruktorzy" },
+  { label: "Kontakt", href: "/#kontakt" },
 ];
 
 export default function Navbar() {
@@ -98,7 +98,7 @@ export default function Navbar() {
 
           {/* Główny przycisk CTA: Zapisz się na kurs */}
           <Link
-            href="#zapisy"
+            href="/application"
             className="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 shadow-md hover:shadow-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
           >
             Zapisz się na kurs
@@ -195,7 +195,7 @@ export default function Navbar() {
       {/* Dolna sekcja menu mobilnego */}
       <div className="pt-6 border-t border-border space-y-4">
         <Link
-          href="#zapisy"
+          href="/application"
           onClick={() => setIsMobileMenuOpen(false)}
           className="flex items-center justify-center w-full py-3 px-4 rounded-xl text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 shadow-md transition-colors"
         >

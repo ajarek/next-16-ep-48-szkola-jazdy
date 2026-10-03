@@ -1,0 +1,142 @@
+{
+  "breadcrumbs": {
+    "brand": "APEXDRIVE",
+    "section": "WNIOSEK REKRUTACYJNY",
+    "edition": "EDYCJA 2025",
+    "step": "Krok 1 z 2: Dane kursanta i preferencje"
+  },
+  "header": {
+    "badge": "OFICJALNY FORMULARZ ZGŁOSZENIOWY WORD",
+    "title": "Szczegółowy wniosek o szkolenie",
+    "subtitle": "Wypełnij kartę rejestracyjną w 90 sekund. Zarezerwuj instruktora prowadzącego, dogodne godziny oraz dedykowany plac manewrowy w Kołobrzegu.",
+    "trustBadges": [
+      {
+        "id": "price-guarantee",
+        "title": "Gwarancja Ceny",
+        "subtitle": "Bez ukrytych kosztów paliwa",
+        "icon": "ShieldCheck"
+      },
+      {
+        "id": "fast-start",
+        "title": "Start w 48h",
+        "subtitle": "Dostęp do e-kursu od ręki",
+        "icon": "Zap"
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "cat-b",
+      "code": "Kat. B",
+      "title": "Samochód osobowy (Kat. B)",
+      "subtitle": "Kia Rio & Toyota Yaris (Standard WORD)",
+      "price": 3400,
+      "priceFormatted": "3 400 zł",
+      "hoursSummary": "Kategoria B • 30h teorii + 30h praktyki",
+      "icon": "Car"
+    },
+    {
+      "id": "cat-c",
+      "code": "Kat. C",
+      "title": "Samochód ciężarowy (Kat. C)",
+      "subtitle": "MAN TGL 12.250 + plac manewrowy",
+      "price": 4200,
+      "priceFormatted": "4 200 zł",
+      "hoursSummary": "Kategoria C • 20h teorii + 30h praktyki",
+      "icon": "Truck"
+    },
+    {
+      "id": "cat-ce",
+      "code": "Kat. C+E",
+      "title": "Ciężarówka z przyczepą (C+E)",
+      "subtitle": "Zestaw tandemowy z kamerą cofania",
+      "price": 4100,
+      "priceFormatted": "4 100 zł",
+      "hoursSummary": "Kategoria C+E • 25h intensywnej praktyki",
+      "icon": "Trailer"
+    },
+    {
+      "id": "cat-d",
+      "code": "Kat. D",
+      "title": "Autobus (Kat. D)",
+      "subtitle": "Solaris Urbino 12 autokar szosowy",
+      "price": 5600,
+      "priceFormatted": "5 600 zł",
+      "hoursSummary": "Kategoria D • 20h teorii + 60h praktyki",
+      "icon": "Bus"
+    }
+  ],
+  "timePreferences": [
+    {
+      "id": "morning",
+      "title": "Poranek",
+      "hours": "07:00 - 11:00",
+      "icon": "Sunrise"
+    },
+    {
+      "id": "day",
+      "title": "Dzień",
+      "hours": "11:00 - 16:00",
+      "icon": "Sun"
+    },
+    {
+      "id": "evening",
+      "title": "Wieczór",
+      "hours": "16:00 - 21:00",
+      "icon": "Moon"
+    }
+  ],
+  "learningAccess": {
+    "title": "Dostęp do platformy e-learningowej",
+    "subtitle": "Baza oficjalnych pytań PWPW/WORD 2025",
+    "badge": "W CENIE"
+  },
+  "summary": {
+    "availabilityBadge": "GWARANCJA TERMINU",
+    "spotsLeft": "4 wolne miejsca",
+    "costLabel": "Szacowany koszt szkolenia:",
+    "features": [
+      "Podstawienie auta na egzamin państwowy",
+      "Wykłady hybrydowe (Live lub VOD)",
+      "Egzamin wewnętrzny teoretyczny & praktyczny",
+      "Materiały dydaktyczne i aplikacja testowa"
+    ],
+    "ctaText": "Zapisuję się",
+    "note": "Brak opłat wstępnych • Płatność na 1. zajęciach"
+  },
+  "coordinator": {
+    "name": "Marta Wiśniewska",
+    "role": "Koordynator Zapisów",
+    "status": "Aktywny",
+    "image": "/images/marta-wisniewska.jpg",
+    "quote": "Masz pytania co do orzeczenia lekarskiego lub procedury PKK w Wydziale Komunikacji? Zadzwoń do mnie bezpośrednio.",
+    "phone": "+48 573 219 230",
+    "hours": "Pn - Pt 8-18"
+  },
+  "fleet": {
+    "badge": "FLOTA 2024/2025",
+    "title": "Identyczne pojazdy jak w WORD",
+    "subtitle": "Klimatyzacja, asystent ruszania pod górę, kamery",
+    "image": "/images/flota-word.jpg"
+  },
+  "guarantees": [
+    {
+      "id": "installments",
+      "icon": "CreditCard",
+      "title": "Raty 0% bez banku",
+      "subtitle": "Rozłóż kurs na 3 równe raty"
+    },
+    {
+      "id": "routes",
+      "icon": "Compass",
+      "title": "Trasy WORD Kołobrzeg",
+      "subtitle": "Ćwiczymy trudne skrzyżowania"
+    },
+    {
+      "id": "moneyback",
+      "icon": "ShieldCheck",
+      "title": "Rezygnacja 14 dni",
+      "subtitle": "100% zwrot wpłaconych środków"
+    }
+  ]
+}
