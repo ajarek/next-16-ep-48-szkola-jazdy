@@ -65,9 +65,10 @@ export default function WebGlBackground() {
         vec3 darkAccent = vec3(0.02, 0.18, 0.16);   // szmaragdowa głębia
         vec3 darkGlow2 = vec3(0.12, 0.04, 0.08);    // ciepły akcent
 
-        vec3 lightBase = vec3(0.96, 0.97, 0.99);    // #f4f6fb
-        vec3 lightAccent = vec3(0.90, 0.95, 0.98);  // lodowy błękit
-        vec3 lightGlow2 = vec3(0.97, 0.93, 0.95);   // delikatna poświata
+        // Czysta, świeża, promienna biel w trybie jasnym
+        vec3 lightBase = vec3(0.988, 0.992, 1.0);    // #fcfdfe
+        vec3 lightAccent = vec3(0.965, 0.98, 1.0);   // bardzo delikatny, jasny błękit
+        vec3 lightGlow2 = vec3(0.992, 0.988, 1.0);   // subtelna perłowa poświata
 
         vec3 baseColor = mix(lightBase, darkBase, u_is_dark);
         vec3 accentColor = mix(lightAccent, darkAccent, u_is_dark);
@@ -75,8 +76,8 @@ export default function WebGlBackground() {
 
         float wave1 = sin(st.x * 2.5 + u_time * 0.25) * 0.5 + 0.5;
         float wave2 = cos(st.y * 2.0 - u_time * 0.2) * 0.5 + 0.5;
-        vec3 ambientGrad = mix(baseColor, accentColor, wave1 * 0.35);
-        ambientGrad = mix(ambientGrad, accent2Color, wave2 * (1.0 - st.x) * 0.25);
+        vec3 ambientGrad = mix(baseColor, accentColor, wave1 * 0.25);
+        ambientGrad = mix(ambientGrad, accent2Color, wave2 * (1.0 - st.x) * 0.15);
 
         // 2. Interaktywny reflektor (Spotlight) wokół kursora
         float distToMousePx = distance(pixelCoord, mousePixel);
@@ -96,18 +97,18 @@ export default function WebGlBackground() {
         float distToIntersection = length(cellOffset);
         float dotAlpha = 1.0 - smoothstep(1.2, 2.8, distToIntersection);
 
-        // Widoczność siatki: wyraźna wartość bazowa + dynamiczne wzmocnienie w rejonie reflektora
-        float baseLineAlpha = mix(0.24, 0.22, u_is_dark);
-        float spotLineBonus = mix(0.40, 0.65, u_is_dark);
+        // Widoczność siatki: delikatna i jasna w light mode, wyraźna w dark mode
+        float baseLineAlpha = mix(0.06, 0.22, u_is_dark);
+        float spotLineBonus = mix(0.12, 0.65, u_is_dark);
         float effectiveLineAlpha = lineAlpha * (baseLineAlpha + spotlight * spotLineBonus);
 
-        float baseDotAlpha = mix(0.35, 0.45, u_is_dark);
-        float spotDotBonus = mix(0.50, 0.55, u_is_dark);
+        float baseDotAlpha = mix(0.08, 0.45, u_is_dark);
+        float spotDotBonus = mix(0.15, 0.55, u_is_dark);
         float effectiveDotAlpha = dotAlpha * (baseDotAlpha + spotlight * spotDotBonus);
 
         // Barwy siatki dostosowane do trybu jasnego i ciemnego
-        vec3 lightGridColor = vec3(0.52, 0.58, 0.70); // elegancki, widoczny stalowo-szary w light mode
-        vec3 lightActiveGrid = vec3(0.12, 0.48, 0.62); // nasycony błękit pod reflektorem
+        vec3 lightGridColor = vec3(0.82, 0.86, 0.92); // bardzo subtelna, jasna, elegancka siatka w light mode
+        vec3 lightActiveGrid = vec3(0.35, 0.62, 0.88); // delikatny błękit pod reflektorem
         vec3 darkGridColor = vec3(0.18, 0.42, 0.48);  // stonowany morski w dark mode
         vec3 darkActiveGrid = vec3(0.25, 0.95, 0.78);  // świetlisty szmaragd pod reflektorem
 
@@ -120,10 +121,10 @@ export default function WebGlBackground() {
         finalColor = mix(finalColor, gridActive, clamp(effectiveDotAlpha, 0.0, 1.0));
 
         // Subtelna poświata reflektora w tle
-        vec3 lightGlow = vec3(0.70, 0.88, 0.98);
+        vec3 lightGlow = vec3(0.88, 0.94, 1.0);
         vec3 darkGlow = vec3(0.08, 0.50, 0.45);
         vec3 glowColor = mix(lightGlow, darkGlow, u_is_dark);
-        float glowStrength = mix(0.12, 0.22, u_is_dark);
+        float glowStrength = mix(0.05, 0.22, u_is_dark);
         finalColor += glowColor * (spotlight * glowStrength);
 
         gl_FragColor = vec4(finalColor, 1.0);
@@ -234,12 +235,7 @@ export default function WebGlBackground() {
       currentMouseX += (targetMouseX - currentMouseX) * 0.08;
       currentMouseY += (targetMouseY - currentMouseY) * 0.08;
 
-      const isDark =
-        document.documentElement.classList.contains("dark") ||
-        (!document.documentElement.classList.contains("light") &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-          ? 1.0
-          : 0.0;
+      const isDark = document.documentElement.classList.contains("dark") ? 1.0 : 0.0;
 
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       const elapsed = prefersReducedMotion ? 0.0 : (performance.now() - startTime) * 0.001;
