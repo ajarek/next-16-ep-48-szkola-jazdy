@@ -1,0 +1,149 @@
+{
+  "badge": "Centrum Obsługi Kursanta • Kołobrzeg",
+  "eyebrow": "Zacznijmy rozmowę",
+  "title": "Skontaktuj się z nami",
+  "lead": "Jeśli masz jakiekolwiek pytania lub chciałbyś umówić się na bezpłatną konsultację z jednym z naszych instruktorów, nie wahaj się z nami skontaktować. Odpowiadamy zwykle w ciągu",
+  "leadHighlight": "30 minut",
+  "reaction": {
+    "time": "18 min",
+    "title": "Średni czas reakcji",
+    "note": "Konsultanci i koordynatorzy grafiku są online"
+  },
+  "socialLabel": "Obserwuj nas:",
+  "channels": [
+    {
+      "id": "phone",
+      "icon": "Phone",
+      "kicker": "Infolinia",
+      "kickerTone": "info",
+      "primary": "+48 573 219 230",
+      "primaryHref": "tel:+48573219230",
+      "note": "Dostępny: 08:00 – 20:00 (Pn – Sob)"
+    },
+    {
+      "id": "email",
+      "icon": "Mail",
+      "kicker": "Poczta 24/7",
+      "kickerTone": "mail",
+      "primary": "ajarek@poczta.onet.pl",
+      "primaryHref": "mailto:ajarek@poczta.onet.pl",
+      "secondary": "oraz kontakt@szkolajazdy-kolobrzeg.pl",
+      "secondaryHref": "mailto:kontakt@szkolajazdy-kolobrzeg.pl"
+    },
+    {
+      "id": "address",
+      "icon": "MapPin",
+      "kicker": "Kołobrzeg",
+      "kickerTone": "muted",
+      "primary": "ul. Koszalińska 14",
+      "primaryHref": "https://www.google.com/maps/search/?api=1&query=Ko%C5%82obrzeg%20ul.%20Koszali%C5%84ska%2014",
+      "note": "78-100 Kołobrzeg & Plac Manewrowy WORD"
+    },
+    {
+      "id": "hours",
+      "icon": "Clock",
+      "kicker": "Biuro OSK",
+      "kickerTone": "muted",
+      "primary": "Pon – Pt: 09:00 – 18:00",
+      "note": "Sobota: 10:00 – 14:00 (Wykłady PKK)"
+    }
+  ],
+  "socials": [
+    { "id": "x", "label": "X" },
+    { "id": "instagram", "label": "Instagram" },
+    { "id": "youtube", "label": "YouTube" },
+    { "id": "facebook", "label": "Facebook" }
+  ],
+  "form": {
+    "title": "Napisz do Nas",
+    "badge": "Szybka ścieżka",
+    "description": "Wypełnij krótki formularz, a nasz instruktor koordynujący skontaktuje się z Tobą telefonicznie lub mailowo.",
+    "submitLabel": "Wyślij wiadomość",
+    "consentLead": "Zgadzam się na przetwarzanie danych osobowych w celu kontaktu zwrotnego zgodnie z",
+    "consentLinkLabel": "Polityką Prywatności",
+    "placeholders": {
+      "name": "np. Piotr Kowalski",
+      "email": "twoj.email@domena.pl",
+      "message": "Opisz, w czym możemy Ci pomóc (np. preferowane godziny jazd, data startu kursu)…"
+    },
+    "topics": [
+      {
+        "id": "cat-b",
+        "label": "Zapis na Kurs Prawa Jazdy (Kat. B / B+E)",
+        "hint": "Podaj preferowane godziny jazd i planowaną datę startu — koordynator sprawdzi wolne miejsca."
+      },
+      {
+        "id": "cat-heavy",
+        "label": "Kurs kategorii C, C+E lub D",
+        "hint": "Napisz, czy masz już kat. B i kiedy możesz zacząć zajęcia na placu."
+      },
+      {
+        "id": "schedule",
+        "label": "Terminy jazd i grafik instruktora",
+        "hint": "Podaj dni oraz widełki godzin, w których możesz jeździć."
+      },
+      {
+        "id": "pkk",
+        "label": "Wykłady teoretyczne PKK",
+        "hint": "Soboty 10:00–14:00. Napisz, od którego zjazdu chcesz dołączyć."
+      },
+      {
+        "id": "payments",
+        "label": "Płatności i raty 0%",
+        "hint": "Raty dzielimy na 3 transze bez odsetek. Zapytaj o harmonogram dla swojej kategorii."
+      },
+      {
+        "id": "access",
+        "label": "Dojazd na plac manewrowy",
+        "hint": "Plac jest przy węźle Koszalińska, 1,2 km od dworca PKP. Dojeżdżają linie 2, 4 i 10."
+      },
+      {
+        "id": "other",
+        "label": "Inna sprawa",
+        "hint": "Opisz krótko temat, a odezwiemy się z konkretną odpowiedzią."
+      }
+    ]
+  },
+  "location": {
+    "eyebrow": "Lokalizacja & trasy egzaminacyjne",
+    "title": "Plac Manewrowy & Sala Wykładowa",
+    "badges": [
+      {
+        "id": "scale",
+        "icon": "Repeat",
+        "text": "Wymiary 1:1 z egzaminem WORD"
+      },
+      {
+        "id": "parking",
+        "icon": "CircleParking",
+        "text": "Darmowy parking dla kursantów"
+      }
+    ],
+    "cardTitle": "Kołobrzeg Wschód • Trasa WORD",
+    "distance": "1,2 km od Dworca PKP",
+    "description": "Nasz oświetlony plac manewrowy z nawierzchnią asfaltową i wzniesieniem egzaminacyjnym znajduje się tuż przy węźle Koszalińska.",
+    "mapsLabel": "Otwórz w Google Maps",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Ko%C5%82obrzeg%20ul.%20Koszali%C5%84ska%2014%20plac%20manewrowy",
+    "busLabel": "Dojazd autobusami: linie 2, 4, 10"
+  },
+  "highlights": [
+    {
+      "id": "fleet",
+      "icon": "Car",
+      "title": "Flota z Egzaminu",
+      "description": "Identyczne modele pojazdów jak w ośrodku WORD Koszalin."
+    },
+    {
+      "id": "installments",
+      "icon": "CreditCard",
+      "title": "Raty 0% na kurs",
+      "description": "Możliwość podziału opłaty za prawo jazdy na 3 nieoprocentowane transze."
+    },
+    {
+      "id": "mentor",
+      "icon": "Headset",
+      "title": "Opiekun Kursanta",
+      "description": "Dedykowany instruktor prowadzący od pierwszego wykładu po odbiór plastiku."
+    }
+  ]
+}

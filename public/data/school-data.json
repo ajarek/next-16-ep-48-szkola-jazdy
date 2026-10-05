@@ -9,8 +9,7 @@
   "navLinks": [
     { "label": "Kategorie i Ceny", "href": "#kategorie" },
     { "label": "Zapisz się / Wniosek", "href": "#zapisy" },
-    { "label": "Instruktorzy", "href": "#instruktorzy" },
-    { "label": "Kontakt", "href": "#kontakt" }
+    { "label": "Kontakt", "href": "contact" }
   ],
   "hero": {
     "badge": "KOŁOBRZEG • SZKOŁA JAZDY NOWEJ GENERACJI",
