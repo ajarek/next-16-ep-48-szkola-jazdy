@@ -14,7 +14,7 @@ import {
 
 const QUICK_LINKS = [
   { label: "Kategorie A, B, C, CE, D", href: "/categories" },
-  { label: "Formularz PKK & Zapisy", href: "/#zapisy" },
+  { label: "Formularz PKK & Zapisy", href: "/application" },
   { label: "Dojazd i Sala Wykładowa", href: "/contact" },
 ]
 

@@ -102,7 +102,7 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       {/* CTA button */}
       <div className="px-5 pb-5 mt-auto">
         <Link
-          href="#zapisy"
+          href="/application"
           className="group/btn flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold shadow-md shadow-blue-700/20 hover:shadow-lg hover:shadow-blue-700/30 hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
           Zapisz się

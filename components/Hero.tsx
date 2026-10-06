@@ -40,7 +40,7 @@ export default function Hero({ videoSrc = "/videos/szkola-jazdy.mp4" }: HeroProp
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8">
                 {/* 1. Główny przycisk: Zapisz się teraz */}
                 <Link
-                  href="#zapisy"
+                  href="/application"
                   className="group inline-flex items-center justify-center gap-3 px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm sm:text-base shadow-lg shadow-blue-700/25 hover:shadow-xl hover:shadow-blue-700/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                 >
                   <span>Zapisz się teraz</span>
@@ -49,7 +49,7 @@ export default function Hero({ videoSrc = "/videos/szkola-jazdy.mp4" }: HeroProp
 
                 {/* 2. Przycisk: Sprawdź kategorie i cennik */}
                 <Link
-                  href="#kategorie"
+                  href="/categories"
                   className="inline-flex items-center gap-3.5 px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl bg-blue-50/80 hover:bg-blue-100/90 dark:bg-slate-800/80 dark:hover:bg-slate-800 border border-blue-100 dark:border-slate-700/80 text-foreground transition-all duration-200 hover:-translate-y-0.5"
                 >
                   <Car className="size-5.5 text-blue-700 dark:text-blue-400 shrink-0" />

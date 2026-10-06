@@ -158,7 +158,7 @@ export default function FinancingCalculator({
             </div>
           </div>
           <a
-            href="#zapisy"
+            href="/application"
             className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow-md shadow-blue-700/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
             Wybierz ten plan
