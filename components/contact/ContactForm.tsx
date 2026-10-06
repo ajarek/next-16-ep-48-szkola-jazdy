@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, CheckCircle2, ChevronDown, Mail, Phone, Send, User } from "lucide-react";
 import { ContactFormContent, ContactFormValues, createContactSchema } from "@/lib/contact";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { submitContactMessage } from "@/app/contact/actions";
 
 interface ContactFormProps {
   form: ContactFormContent;
@@ -23,7 +25,20 @@ export default function ContactForm({ form }: ContactFormProps) {
   const [consent, setConsent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [sent, setSent] = useState<ContactFormValues | null>(null);
+
+  // Zalogowany kursant — wiadomość zostanie przypisana do jego konta
+  const { user, profile, getIdToken } = useAuth();
+
+  // Jednorazowe uzupełnienie formularza danymi z profilu
+  const prefilledRef = useRef(false);
+  useEffect(() => {
+    if (prefilledRef.current || !profile) return;
+    prefilledRef.current = true;
+    setFullName((current) => current.trim() || profile.displayName);
+    setEmail((current) => current.trim() || profile.email);
+  }, [profile]);
 
   const selectedTopic = form.topics.find((topic) => topic.id === topicId) ?? form.topics[0];
 
@@ -33,8 +48,9 @@ export default function ContactForm({ form }: ContactFormProps) {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitError(null);
 
     const values: ContactFormValues = {
       fullName: fullName.trim(),
@@ -66,10 +82,24 @@ export default function ContactForm({ form }: ContactFormProps) {
     setErrors({});
     setIsSubmitting(true);
 
-    window.setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Token ID weryfikowany po stronie serwera (Firebase Admin SDK)
+      const idToken = user ? await getIdToken() : null;
+      const submitResult = await submitContactMessage(result.data, idToken);
+
+      if (!submitResult.ok) {
+        setSubmitError(submitResult.message);
+        return;
+      }
+
       setSent(result.data);
-    }, 600);
+    } catch {
+      setSubmitError(
+        "Nie udało się wysłać wiadomości. Spróbuj ponownie za chwilę.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetForm = () => {
@@ -302,6 +332,15 @@ export default function ContactForm({ form }: ContactFormProps) {
               </p>
             ) : null}
           </div>
+
+          {submitError ? (
+            <p
+              role="alert"
+              className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-xs leading-relaxed text-red-600 dark:text-red-300"
+            >
+              {submitError}
+            </p>
+          ) : null}
 
           <button
             type="submit"

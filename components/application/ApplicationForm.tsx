@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   User,
   Calendar,
@@ -28,6 +29,8 @@ import {
   applicationSchema,
   ApplicationFormValues,
 } from "@/lib/application";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { submitApplication } from "@/app/application/actions";
 import PkkInfoModal from "./PkkInfoModal";
 import ApplicationSuccessModal from "./ApplicationSuccessModal";
 
@@ -48,6 +51,20 @@ export default function ApplicationForm({ data }: ApplicationFormProps) {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Stan uwierzytelniania — zgłoszenie zalogowanego kursanta trafia do jego konta
+  const { user, profile, getIdToken } = useAuth();
+
+  // Jednorazowe uzupełnienie formularza danymi z profilu kursanta
+  const prefilledRef = useRef(false);
+  useEffect(() => {
+    if (prefilledRef.current || !profile) return;
+    prefilledRef.current = true;
+    setFullName((current) => current.trim() || profile.displayName);
+    setEmail((current) => current.trim() || profile.email);
+    setPhone((current) => current.trim() || profile.phone);
+  }, [profile]);
 
   // Modale
   const [isPkkModalOpen, setIsPkkModalOpen] = useState(false);
@@ -109,9 +126,10 @@ export default function ApplicationForm({ data }: ApplicationFormProps) {
     setPkkNumber(parts.join(" "));
   };
 
-  // Walidacja i wysyłka formularza
-  const handleSubmit = (e: React.FormEvent) => {
+  // Walidacja i wysyłka formularza do Firestore (Server Action)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitError(null);
 
     const formValues: ApplicationFormValues = {
       fullName: fullName.trim(),
@@ -139,20 +157,32 @@ export default function ApplicationForm({ data }: ApplicationFormProps) {
     setErrors({});
     setIsSubmitting(true);
 
-    // Symulacja szybkiego zapisu w 600ms
-    setTimeout(() => {
-      setIsSubmitting(false);
-      const generatedId = Math.floor(1000 + Math.random() * 9000).toString();
+    try {
+      // Token ID jest weryfikowany po stronie serwera (Firebase Admin SDK)
+      const idToken = user ? await getIdToken() : null;
+      const result = await submitApplication(formValues, idToken);
+
+      if (!result.ok) {
+        setSubmitError(result.message);
+        return;
+      }
+
       setSubmittedData({
         fullName: formValues.fullName,
         phone: formValues.phone,
         email: formValues.email,
         category: selectedCategory,
         timeSlotTitle: `${selectedTimeSlot.title} (${selectedTimeSlot.hours})`,
-        reservationId: `APX-${generatedId}`,
+        reservationId: result.reference ?? `#${(result.id ?? "").slice(-6)}`,
       });
       setIsSuccessModalOpen(true);
-    }, 600);
+    } catch {
+      setSubmitError(
+        "Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -545,6 +575,16 @@ export default function ApplicationForm({ data }: ApplicationFormProps) {
                 ))}
               </ul>
 
+              {/* Komunikat o błędzie zapisu zgłoszenia */}
+              {submitError ? (
+                <p
+                  role="alert"
+                  className="mb-3 rounded-xl border border-red-400/40 bg-red-500/15 p-3 text-xs leading-relaxed text-red-100"
+                >
+                  {submitError}
+                </p>
+              ) : null}
+
               {/* Przycisk CTA */}
               <button
                 type="submit"
@@ -560,6 +600,25 @@ export default function ApplicationForm({ data }: ApplicationFormProps) {
                 <Lock className="size-3.5 shrink-0" />
                 <span>{data.summary.note}</span>
               </div>
+
+              {/* Przypisanie zgłoszenia do konta kursanta */}
+              <p className="mt-3 text-center text-[11px] leading-snug text-blue-200/90">
+                {user ? (
+                  <>Zgłoszenie przypiszemy do konta: {user.email}.</>
+                ) : (
+                  <>
+                    Możesz zgłosić się bez konta, ale z kontem sprawdzisz status
+                    wniosku —{" "}
+                    <Link
+                      href="/register"
+                      className="font-semibold text-white underline underline-offset-2"
+                    >
+                      załóż je w 30 sekund
+                    </Link>
+                    .
+                  </>
+                )}
+              </p>
             </div>
 
             {/* KARTA 2: KOORDYNATOR ZAPISÓW */}

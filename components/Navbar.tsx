@@ -13,6 +13,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { useTheme } from "./ThemeProvider"
+import { useAuth } from "./auth/AuthProvider"
 
 interface NavLink {
   label: string
@@ -28,6 +29,16 @@ const NAV_LINKS: NavLink[] = [
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { toggleTheme } = useTheme()
+  const { user, logout } = useAuth()
+
+  // Inicjały wyświetlane na awatarze zalogowanego kursanta
+  const initials = (() => {
+    const source = user?.displayName || user?.email || ""
+    const parts = source.split(/\s+/).filter(Boolean)
+    if (parts.length === 0) return "K"
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
+    return (parts[0][0] + parts[1][0]).toUpperCase()
+  })()
 
   // Blokowanie przewijania strony przy otwartym menu mobilnym
   useEffect(() => {
@@ -88,6 +99,16 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+
+            {/* Odnośnie widoczny wyłącznie dla zalogowanych kursantów */}
+            {user ? (
+              <Link
+                href='/account'
+                className='hover:text-foreground transition-colors relative py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md'
+              >
+                Moje konto
+              </Link>
+            ) : null}
           </nav>
 
           {/* Prawa strona: Przyciski akcji (Desktop i Mobile) */}
@@ -112,15 +133,26 @@ export default function Navbar() {
               Zapisz się na kurs
             </Link>
 
-            {/* Przycisk profilu / konta kursanta */}
-            <Link
-              href='#profil'
-              aria-label='Profil kursanta'
-              className='hidden sm:flex items-center justify-center size-10 rounded-full bg-blue-700 hover:bg-blue-800 text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600'
-              title='Panel kursanta'
-            >
-              <User className='size-5' />
-            </Link>
+            {/* Przycisk profilu / konta kursanta — zależny od stanu logowania */}
+            {user ? (
+              <Link
+                href='/account'
+                aria-label='Panel kursanta'
+                className='hidden sm:flex items-center justify-center size-10 rounded-full bg-blue-700 hover:bg-blue-800 text-white text-sm font-black tracking-tight transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600'
+                title={`Zalogowano: ${user.email ?? "konto kursanta"}`}
+              >
+                {initials}
+              </Link>
+            ) : (
+              <Link
+                href='/login'
+                aria-label='Zaloguj się do panelu kursanta'
+                className='hidden sm:flex items-center justify-center size-10 rounded-full bg-blue-700 hover:bg-blue-800 text-white transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600'
+                title='Zaloguj się'
+              >
+                <User className='size-5' />
+              </Link>
+            )}
 
             {/* Przycisk menu mobilnego (Hamburger) */}
             <button
@@ -199,6 +231,27 @@ export default function Navbar() {
                 <ChevronRight className='size-4 text-muted-foreground' />
               </Link>
             ))}
+
+            {/* Konto kursanta w menu mobilnym */}
+            {user ? (
+              <Link
+                href='/account'
+                onClick={() => setIsMobileMenuOpen(false)}
+                className='flex items-center justify-between px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-muted transition-colors'
+              >
+                <span>Moje konto</span>
+                <ChevronRight className='size-4 text-muted-foreground' />
+              </Link>
+            ) : (
+              <Link
+                href='/login'
+                onClick={() => setIsMobileMenuOpen(false)}
+                className='flex items-center justify-between px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-muted transition-colors'
+              >
+                <span>Zaloguj się</span>
+                <ChevronRight className='size-4 text-muted-foreground' />
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -219,6 +272,20 @@ export default function Navbar() {
             <PhoneCall className='size-4 text-blue-600 dark:text-blue-400' />
             <span>+48 573 219 230</span>
           </a>
+
+          {/* Wylogowanie (widoczne wyłącznie po zalogowaniu) */}
+          {user ? (
+            <button
+              type='button'
+              onClick={() => {
+                void logout()
+                setIsMobileMenuOpen(false)
+              }}
+              className='w-full py-2.5 px-4 rounded-xl text-sm font-medium border border-red-500/40 text-red-600 dark:text-red-400 hover:bg-red-500/10 transition-colors text-left'
+            >
+              Wyloguj się
+            </button>
+          ) : null}
 
           {/* Przełącznik motywu w panelu mobilnym */}
           <div className='flex items-center justify-between px-2 pt-2 text-sm text-muted-foreground'>

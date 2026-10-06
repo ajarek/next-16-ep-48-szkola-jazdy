@@ -1,0 +1,78 @@
+rules_version = '2';
+
+// Reguły bezpieczeństwa Firestore.
+// Wdrożenie: firebase deploy --only firestore:rules
+//
+// Zasada nadrzędna:
+//  - zapisy merytoryczne (wnioski, wiadomości) idą przez Server Action
+//    i Firebase Admin SDK, który pomija reguły — dlatego klientowi zostawiamy
+//    wyłącznie odczyt własnych danych oraz zarządzanie własnym profilem,
+//  - każdy użytkownik widzi wyłącznie dokumenty przypisane do swojego uid,
+//  - pełny dostęp (administracja) przez claim `admin: true` w tokenie.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    // ── Profile użytkowników ──────────────────────────────────
+    // Dokument tworzy klient po rejestracji, ale wyłącznie dla siebie
+    // i bez możliwości podniesienia uprawnień.
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+
+      allow create: if isOwner(uid)
+        && request.resource.data.role == "kursant"
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.uid == uid;
+
+      // Właściciel może edytować wyłącznie wybrane pola profilu,
+      // bez zmiany roli i identyfikatora.
+      allow update: if isOwner(uid)
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email;
+
+      allow delete: if isAdmin();
+    }
+
+    // ── Zgłoszenia / wnioski o szkolenie ──────────────────────
+    // Zapis wyłącznie po stronie serwera (Admin SDK pomija reguły).
+    match /applications/{applicationId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── Wiadomości z formularza kontaktowego ──────────────────
+    match /contactMessages/{messageId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── Jazdy i wykłady ───────────────────────────────────────
+    // Odczyt wyłącznie własnych zajęć, zapis tylko z poziomu panelu
+    // administracyjnego (Admin SDK).
+    match /lessons/{lessonId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Blokada dostępu do dokumentów spoza zdefiniowanych kolekcji.
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

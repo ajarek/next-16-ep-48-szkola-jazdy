@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 import { FloatingThemeToggle } from "@/components/FloatingThemeToggle";
 import WebGlBackground from "@/components/WebGlBackground";
 import Footer from "@/components/Footer";
@@ -74,20 +75,23 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground transition-colors selection:bg-blue-600 selection:text-white">
         <ThemeProvider>
-          {/* Subtelny shader WebGL ze spotlightem i siatką w tle */}
-          <WebGlBackground />
+          {/* Kontekst uwierzytelniania Firebase dostępny na każdej stronie */}
+          <AuthProvider>
+            {/* Subtelny shader WebGL ze spotlightem i siatką w tle */}
+            <WebGlBackground />
 
-          {/* Główny pasek nawigacyjny widoczny na wszystkich stronach */}
-          <Navbar />
+            {/* Główny pasek nawigacyjny widoczny na wszystkich stronach */}
+            <Navbar />
 
-          {/* Główna treść strony */}
-          <main className="flex-1 flex flex-col">{children}</main>
+            {/* Główna treść strony */}
+            <main className="flex-1 flex flex-col">{children}</main>
 
-          {/* Globalna stopka widoczna na wszystkich stronach */}
-          <Footer />
+            {/* Globalna stopka widoczna na wszystkich stronach */}
+            <Footer />
 
-          {/* Pływający przycisk zmiany trybu jasny/ciemny w prawym dolnym rogu */}
-          <FloatingThemeToggle />
+            {/* Pływający przycisk zmiany trybu jasny/ciemny w prawym dolnym rogu */}
+            <FloatingThemeToggle />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

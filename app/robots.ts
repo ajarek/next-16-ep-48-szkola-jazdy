@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 /**
  * Konfiguracja pliku robots.txt dla wyszukiwarek (Next.js App Router).
- * Zezwala na indeksowanie publicznych stron (landing page, cennik),
- * natomiast chroni prywatne trasy użytkowników i panel administratora.
+ * Zezwala na indeksowanie publicznych stron serwisu, natomiast chroni
+ * prywatne trasy: panel kursanta, logowanie, rejestrację i zasoby API.
  */
 export default function robots(): MetadataRoute.Robots {
   const baseUrl =
@@ -17,8 +17,15 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/", "/pricing"],
-      disallow: ["/dashboard", "/admin", "/api/"],
+      allow: ["/", "/categories", "/application", "/contact"],
+      disallow: [
+        "/account",
+        "/login",
+        "/register",
+        "/dashboard",
+        "/admin",
+        "/api/",
+      ],
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

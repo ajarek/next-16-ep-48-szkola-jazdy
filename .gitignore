@@ -32,9 +32,17 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
+
+# firebase (emulatory i dzienniki)
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
+firebase-emulator-data/
 
 # typescript
 *.tsbuildinfo

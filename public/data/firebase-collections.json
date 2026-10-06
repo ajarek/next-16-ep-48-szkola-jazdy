@@ -1,0 +1,162 @@
+{
+  "description": "Przykładowe dokumenty kolekcji Firestore. Wykorzystuje je skrypt npm run seed:firestore. Placeholdery: {{uid}} — identyfikator konta z flagi --uid, {{now-30d}} — pełny znacznik czasu przesunięty o N dni, {{date+2d}} — sama data (RRRR-MM-DD) przesunięta o N dni.",
+  "collections": {
+    "users": [
+      {
+        "id": "{{uid}}",
+        "uid": "{{uid}}",
+        "email": "anna.kowalska@demo.pl",
+        "displayName": "Anna Kowalska",
+        "phone": "573 219 230",
+        "role": "kursant",
+        "category": "cat-b",
+        "marketingConsent": true,
+        "createdAt": "{{now-45d}}",
+        "lastLoginAt": "{{now-1d}}"
+      }
+    ],
+    "applications": [
+      {
+        "id": "demo-application-1",
+        "reference": "APX-1042",
+        "userId": "{{uid}}",
+        "fullName": "Anna Kowalska",
+        "age": "24",
+        "phone": "573 219 230",
+        "email": "anna.kowalska@demo.pl",
+        "pkkNumber": "12345678901234567890",
+        "categoryId": "cat-b",
+        "categoryLabel": "Samochód osobowy (Kat. B)",
+        "timeSlot": "evening",
+        "timeSlotLabel": "Wieczór (16:00 - 21:00)",
+        "status": "potwierdzony",
+        "internalNote": "Kursantka preferuje jazdy po 17:00, plac manewrowy przy Koszalińskiej.",
+        "createdAt": "{{now-30d}}",
+        "updatedAt": "{{now-29d}}"
+      },
+      {
+        "id": "demo-application-2",
+        "reference": "APX-2287",
+        "userId": null,
+        "fullName": "Piotr Zieliński",
+        "age": "18",
+        "phone": "600 100 200",
+        "email": "piotr.zielinski@demo.pl",
+        "pkkNumber": null,
+        "categoryId": "cat-c",
+        "categoryLabel": "Samochód ciężarowy (Kat. C)",
+        "timeSlot": "morning",
+        "timeSlotLabel": "Poranek (07:00 - 11:00)",
+        "status": "nowy",
+        "internalNote": null,
+        "createdAt": "{{now-3d}}",
+        "updatedAt": "{{now-3d}}"
+      }
+    ],
+    "contactMessages": [
+      {
+        "id": "demo-message-1",
+        "userId": "{{uid}}",
+        "fullName": "Anna Kowalska",
+        "email": "anna.kowalska@demo.pl",
+        "topicId": "schedule",
+        "topicLabel": "Terminy jazd i grafik instruktora",
+        "message": "Dzień dobry, czy w przyszłym tygodniu zostałaby sobotnia jazda na godzinę 10:00? Pozdrawiam.",
+        "consent": true,
+        "status": "odpowiadana",
+        "createdAt": "{{now-5d}}"
+      },
+      {
+        "id": "demo-message-2",
+        "userId": null,
+        "fullName": "Marta Lewandowska",
+        "email": "marta.lewandowska@demo.pl",
+        "topicId": "payments",
+        "topicLabel": "Płatności i raty 0%",
+        "message": "Czy raty 0% obejmują również kategorii C i jak wygląda harmonogram płatności przy zaliczce 500 zł?",
+        "consent": true,
+        "status": "nowy",
+        "createdAt": "{{now-2d}}"
+      }
+    ],
+    "lessons": [
+      {
+        "id": "demo-lesson-1",
+        "userId": "{{uid}}",
+        "type": "wyklad",
+        "title": "Wykład: przepisy ruchu drogowego",
+        "startsAt": "{{date-21d}}T10:00:00.000Z",
+        "durationMin": 60,
+        "instructor": "Marek Zieliński",
+        "category": "Samochód osobowy (Kat. B)",
+        "status": "zaliczone"
+      },
+      {
+        "id": "demo-lesson-2",
+        "userId": "{{uid}}",
+        "type": "jazda",
+        "title": "Jazda: plac manewrowy",
+        "startsAt": "{{date-14d}}T17:00:00.000Z",
+        "durationMin": 120,
+        "instructor": "Agnieszka Nowak",
+        "category": "Samochód osobowy (Kat. B)",
+        "status": "zaliczone"
+      },
+      {
+        "id": "demo-lesson-3",
+        "userId": "{{uid}}",
+        "type": "jazda",
+        "title": "Jazda: rondo i skrzyżowania",
+        "startsAt": "{{date-7d}}T17:00:00.000Z",
+        "durationMin": 120,
+        "instructor": "Agnieszka Nowak",
+        "category": "Samochód osobowy (Kat. B)",
+        "status": "zaliczone"
+      },
+      {
+        "id": "demo-lesson-4",
+        "userId": "{{uid}}",
+        "type": "jazda",
+        "title": "Jazda: parkowanie równoległe",
+        "startsAt": "{{date-2d}}T17:00:00.000Z",
+        "durationMin": 120,
+        "instructor": "Tomasz Wójcik",
+        "category": "Samochód osobowy (Kat. B)",
+        "status": "odwolane"
+      },
+      {
+        "id": "demo-lesson-5",
+        "userId": "{{uid}}",
+        "type": "wyklad",
+        "title": "Wykład: pierwsza pomoc i bezpieczeństwo",
+        "startsAt": "{{date+1d}}T16:00:00.000Z",
+        "durationMin": 60,
+        "instructor": "Marek Zieliński",
+        "category": "Samochód osobowy (Kat. B)",
+        "status": "zaplanowane"
+      },
+      {
+        "id": "demo-lesson-6",
+        "userId": "{{uid}}",
+        "type": "jazda",
+        "title": "Jazda: miasto i manewry",
+        "startsAt": "{{date+3d}}T17:00:00.000Z",
+        "durationMin": 120,
+        "instructor": "Agnieszka Nowak",
+        "category": "Samochód osobowy (Kat. B)",
+        "status": "zaplanowane"
+      },
+      {
+        "id": "demo-lesson-7",
+        "userId": "{{uid}}",
+        "type": "jazda",
+        "title": "Jazda: trasa egzaminacyjna WORD",
+        "startsAt": "{{date+6d}}T09:00:00.000Z",
+        "durationMin": 120,
+        "instructor": "Tomasz Wójcik",
+        "category": "Samochód osobowy (Kat. B)",
+        "status": "zaplanowane"
+      }
+    ]
+  }
+}
