@@ -4,9 +4,10 @@ rules_version = '2';
 // Wdrożenie: firebase deploy --only firestore:rules
 //
 // Zasada nadrzędna:
-//  - zapisy merytoryczne (wnioski, wiadomości) idą przez Server Action
-//    i Firebase Admin SDK, który pomija reguły — dlatego klientowi zostawiamy
-//    wyłącznie odczyt własnych danych oraz zarządzanie własnym profilem,
+//  - zapisy merytoryczne (wnioski, wiadomości, zapisy na kurs) idą przez
+//    Server Action i Firebase Admin SDK, który pomija reguły — dlatego
+//    klientowi zostawiamy wyłącznie odczyt własnych danych oraz zarządzanie
+//    własnym profilem,
 //  - każdy użytkownik widzi wyłącznie dokumenty przypisane do swojego uid,
 //  - pełny dostęp (administracja) przez claim `admin: true` w tokenie.
 
@@ -65,6 +66,24 @@ service cloud.firestore {
     // Odczyt wyłącznie własnych zajęć, zapis tylko z poziomu panelu
     // administracyjnego (Admin SDK).
     match /lessons/{lessonId} {
+      allow read: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── Katalog kursów ────────────────────────────────────────
+    // Wspólny dla wszystkich (brak pola userId). Odczyt dla zalogowanych,
+    // zapis wyłącznie z poziomu panelu administracyjnego / Server Action.
+    match /courses/{courseId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── Zapisy (zakupy) kursów ─────────────────────────────────
+    // Zapis wyłącznie po stronie serwera (Admin SDK pomija reguły).
+    // Kursant widzi wyłącznie własne zapisy — zapytanie musi filtrować
+    // po `userId` równym zalogowanemu kontu.
+    match /enrollments/{enrollmentId} {
       allow read: if isAdmin()
         || (signedIn() && resource.data.userId == request.auth.uid);
       allow create, update, delete: if isAdmin();

@@ -9,14 +9,17 @@ import {
   CalendarClock,
   Car,
   FileText,
+  GraduationCap,
   MessagesSquare,
   TrendingUp,
 } from "lucide-react";
 import {
   APPLICATION_STATUS_LABEL,
+  computeEnrollmentProgress,
   formatIsoDay,
   type ApplicationDoc,
   type ContactMessageDoc,
+  type EnrollmentDoc,
   type LessonDoc,
 } from "@/lib/firebase/collections";
 import { useNow } from "@/lib/hooks/use-now";
@@ -25,6 +28,7 @@ interface AccountStatsProps {
   applications: ApplicationDoc[];
   lessons: LessonDoc[];
   messages: ContactMessageDoc[];
+  enrollments: EnrollmentDoc[];
   isLoading: boolean;
 }
 
@@ -34,7 +38,7 @@ interface StatCardProps {
   value: string;
   hint: string;
   progress?: number;
-  tone?: "blue" | "emerald" | "amber" | "violet";
+  tone?: "blue" | "emerald" | "amber" | "violet" | "rose";
 }
 
 const TONES: Record<NonNullable<StatCardProps["tone"]>, string> = {
@@ -42,6 +46,7 @@ const TONES: Record<NonNullable<StatCardProps["tone"]>, string> = {
   emerald: "bg-emerald-600",
   amber: "bg-amber-500",
   violet: "bg-violet-600",
+  rose: "bg-rose-600",
 };
 
 function StatCard({
@@ -96,11 +101,35 @@ export default function AccountStats({
   applications,
   lessons,
   messages,
+  enrollments,
   isLoading,
 }: AccountStatsProps) {
   const placeholder = isLoading ? "…" : "—";
 
   const lastApplication = applications[0];
+  const activeEnrollments = enrollments.filter(
+    (enrollment) => enrollment.status === "w_realizacji",
+  );
+  const finishedEnrollments = enrollments.filter(
+    (enrollment) => enrollment.status === "zakonczony",
+  );
+  const averageCourseProgress =
+    activeEnrollments.length > 0
+      ? activeEnrollments.reduce(
+          (sum, enrollment) =>
+            sum + computeEnrollmentProgress(enrollment, lessons),
+          0,
+        ) / activeEnrollments.length
+      : 0;
+
+  const courseHint =
+    enrollments.length === 0
+      ? "Wybierz kurs w katalogu — pojawi się tutaj"
+      : activeEnrollments.length > 0
+        ? `${activeEnrollments.length} w realizacji • postęp ${Math.round(averageCourseProgress * 100)}%`
+        : finishedEnrollments.length > 0
+          ? `${finishedEnrollments.length} ukończonych • ${enrollments.length} łącznie`
+          : "Brak kursów w realizacji";
   const drivingLessons = lessons.filter((lesson) => lesson.type === "jazda");
   const completedDrives = drivingLessons.filter(
     (lesson) => lesson.status === "zaliczone",
@@ -119,7 +148,7 @@ export default function AccountStats({
 
   return (
     <section aria-label="Statystyki konta" className="mt-6">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard
           icon={FileText}
           label="Zgłoszenia"
@@ -130,6 +159,21 @@ export default function AccountStats({
               : "Nie złożono jeszcze żadnego zgłoszenia"
           }
           tone="blue"
+        />
+
+        <StatCard
+          icon={GraduationCap}
+          label="Moje kursy"
+          value={isLoading ? placeholder : String(enrollments.length)}
+          hint={courseHint}
+          progress={
+            enrollments.length === 0
+              ? undefined
+              : activeEnrollments.length > 0
+                ? averageCourseProgress
+                : 1
+          }
+          tone="rose"
         />
 
         <StatCard

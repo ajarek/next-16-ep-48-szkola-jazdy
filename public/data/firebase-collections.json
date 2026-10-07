@@ -157,6 +157,127 @@
         "category": "Samochód osobowy (Kat. B)",
         "status": "zaplanowane"
       }
+    ],
+    "courses": [
+      {
+        "id": "b",
+        "code": "B",
+        "title": "Prawo jazdy kat. B — kurs podstawowy",
+        "description": "Kompletny kurs na prawo jazdy kat. B: wykłady, 30 godzin jazd z wykwalifikowanymi instruktorami i przygotowanie pod egzamin WORD na pojeździe identycznym jak na egzaminie.",
+        "group": "passenger",
+        "categoryId": "cat-b",
+        "categoryLabel": "Samochód osobowy (Kat. B)",
+        "price": 3500,
+        "installmentFrom": 290,
+        "durationLabel": "3,5 miesiąca",
+        "theoryHours": 30,
+        "practiceHours": 30,
+        "modules": [
+          "Przepisy ruchu drogowego i znaki pionowe",
+          "Zagrożenia w ruchu drogowym i pierwsza pomoc",
+          "Plac manewrowy: ruszanie, skręty, koperta",
+          "Jazdy w mieście, ronda i skrzyżowania",
+          "Trasy egzaminacyjne WORD",
+          "Egzamin wewnętrzny teoria + praktyka"
+        ],
+        "image": "/images/auto-osobowe.png",
+        "imageAlt": "Srebrny samochód osobowy Toyota Yaris używany do nauki jazdy kategorii B",
+        "active": true,
+        "createdAt": "{{now-60d}}"
+      },
+      {
+        "id": "c",
+        "code": "C",
+        "title": "Prawo jazdy kat. C — kurs podstawowy",
+        "description": "Szkolenie na prawo jazdy kat. C na ciężarówce MAN TGL zgodnej ze specyfikacją WORD, z dostępem do kwalifikacji wstępnej przewozu rzeczy (kod 95).",
+        "group": "heavy",
+        "categoryId": "cat-c",
+        "categoryLabel": "Samochód ciężarowy (Kat. C)",
+        "price": 4700,
+        "installmentFrom": 390,
+        "durationLabel": "3 miesiące",
+        "theoryHours": 32,
+        "practiceHours": 20,
+        "modules": [
+          "Prawo o ruchu drogowym dla kierowców zawodowych",
+          "Czas pracy, tachograf i dobowy odpoczynek",
+          "Ładunek, naciski i stabilność pojazdu",
+          "Plac manewrowy i jazdy po trasach ciężarowych",
+          "Przygotowanie do egzaminu WORD kat. C"
+        ],
+        "image": "/images/auto-ciezarowe.png",
+        "imageAlt": "Biała ciężarówka MAN TGL używana do nauki jazdy kategorii C",
+        "active": true,
+        "createdAt": "{{now-60d}}"
+      },
+      {
+        "id": "ce",
+        "code": "C+E",
+        "title": "Prawo jazdy kat. C+E — zestaw z naczepą",
+        "description": "Szkolenie na zestaw ciężarowy z naczepą: manewrowanie pod rampę, jazda z przyczepą i precyzyjne parkowanie. Pakiet łączony C+C+E z rabatem 800 zł.",
+        "group": "heavy",
+        "categoryId": "cat-ce",
+        "categoryLabel": "Ciężarówka z przyczepą (C+E)",
+        "price": 5100,
+        "installmentFrom": 425,
+        "durationLabel": "2 miesiące",
+        "theoryHours": 8,
+        "practiceHours": 15,
+        "modules": [
+          "Budowa i rodzaje naczep oraz sprzęgów",
+          "Łączenie i rozłączanie zestawu pojazdów",
+          "Jazda z naczepą po trasach egzaminacyjnych",
+          "Manewry z ograniczoną przestrzenią i pod rampą",
+          "Egzamin wewnętrzny kat. C+E"
+        ],
+        "image": "/images/auto-tir.png",
+        "imageAlt": "Zestaw ciężarowy z naczepą używany do nauki jazdy kategorii C+E",
+        "active": true,
+        "createdAt": "{{now-60d}}"
+      },
+      {
+        "id": "d",
+        "code": "D",
+        "title": "Prawo jazdy kat. D — autobus",
+        "description": "Kurs na prawo jazdy kat. D realizowany autobusem z automatyczną skrzynią biegów, z naciskiem na bezpieczeństwo pasażerów i obsługę drzwi oraz zapowiedzi.",
+        "group": "bus",
+        "categoryId": "cat-d",
+        "categoryLabel": "Autobus (Kat. D)",
+        "price": 5500,
+        "installmentFrom": 458,
+        "durationLabel": "3 miesiące",
+        "theoryHours": 30,
+        "practiceHours": 20,
+        "modules": [
+          "Bezpieczeństwo pasażerów i ewakuacja",
+          "Obsługa drzwi, zapowiedzi i urządzeń autobusu",
+          "Jazda w ruchu miejskim i na trasach egzaminacyjnych",
+          "Plac manewrowy i łuki pod kątem",
+          "Egzamin wewnętrzny kat. D"
+        ],
+        "image": "/images/autobus.png",
+        "imageAlt": "Biały autokar szkoleniowy z automatyczną skrzynią biegów do nauki jazdy kategorii D",
+        "active": true,
+        "createdAt": "{{now-60d}}"
+      }
+    ],
+    "enrollments": [
+      {
+        "id": "demo-enrollment-1",
+        "reference": "ZAP-4821",
+        "userId": "{{uid}}",
+        "courseId": "b",
+        "courseCode": "B",
+        "courseTitle": "Prawo jazdy kat. B — kurs podstawowy",
+        "categoryLabel": "Samochód osobowy (Kat. B)",
+        "price": 3500,
+        "installments": 6,
+        "status": "w_realizacji",
+        "progress": 0.4,
+        "enrolledAt": "{{now-45d}}",
+        "updatedAt": "{{now-2d}}",
+        "completedAt": null
+      }
     ]
   }
 }

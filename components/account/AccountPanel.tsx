@@ -19,16 +19,23 @@ import {
   COLLECTIONS,
   type ApplicationDoc,
   type ContactMessageDoc,
+  type CourseDoc,
+  type EnrollmentDoc,
   type LessonDoc,
 } from "@/lib/firebase/collections";
 import { translateFirebaseError } from "@/lib/firebase/errors";
 import AccountStats from "./AccountStats";
 import ProfileCard from "./ProfileCard";
+import CoursesList from "./CoursesList";
 import ApplicationsList from "./ApplicationsList";
 import LessonsList from "./LessonsList";
 import MessagesList from "./MessagesList";
 
-/** Pobiera dokumenty kolekcji, w których pole `userId` równa się uid użytkownika. */
+/**
+ * Pobiera dokumenty kolekcji, w których pole `userId` równa się uid użytkownika.
+ * Identyfikator dokumentu doklejamy do danych — dokumenty zapisane przez
+ * skrypt nasiona nie zawierają pola `id`.
+ */
 async function fetchOwnDocuments<T>(
   collectionName: string,
   uid: string,
@@ -37,7 +44,28 @@ async function fetchOwnDocuments<T>(
   const snapshot = await getDocs(
     query(collection(db, collectionName), where("userId", "==", uid)),
   );
-  return snapshot.docs.map((document) => document.data() as T);
+  return snapshot.docs.map(
+    (document) =>
+      ({ ...document.data(), id: document.id }) as T,
+  );
+}
+
+/**
+ * Pobiera katalog kursów (`courses`) — wspólne źródło oferty.
+ * Katalog pełni wyłącznie rolę wzbogacenia kart (program, czas trwania),
+ * dlatego brak dostępu (np. przed wdrożeniem reguł) nie blokuje panelu.
+ */
+async function fetchCourseCatalog(): Promise<CourseDoc[]> {
+  try {
+    const db = getFirebaseDb();
+    const snapshot = await getDocs(collection(db, COLLECTIONS.courses));
+    return snapshot.docs.map(
+      (document) =>
+        ({ ...document.data(), id: document.id }) as CourseDoc,
+    );
+  } catch {
+    return [];
+  }
 }
 
 function initialsFrom(source: string): string {
@@ -52,15 +80,20 @@ interface OwnData {
   applications: ApplicationDoc[];
   messages: ContactMessageDoc[];
   lessons: LessonDoc[];
+  enrollments: EnrollmentDoc[];
+  courses: CourseDoc[];
 }
 
 /** Pobiera i sortuje wszystkie dokumenty należące do użytkownika. */
 async function fetchOwnData(uid: string): Promise<OwnData> {
-  const [applications, messages, lessons] = await Promise.all([
-    fetchOwnDocuments<ApplicationDoc>(COLLECTIONS.applications, uid),
-    fetchOwnDocuments<ContactMessageDoc>(COLLECTIONS.contactMessages, uid),
-    fetchOwnDocuments<LessonDoc>(COLLECTIONS.lessons, uid),
-  ]);
+  const [applications, messages, lessons, enrollments, courses] =
+    await Promise.all([
+      fetchOwnDocuments<ApplicationDoc>(COLLECTIONS.applications, uid),
+      fetchOwnDocuments<ContactMessageDoc>(COLLECTIONS.contactMessages, uid),
+      fetchOwnDocuments<LessonDoc>(COLLECTIONS.lessons, uid),
+      fetchOwnDocuments<EnrollmentDoc>(COLLECTIONS.enrollments, uid),
+      fetchCourseCatalog(),
+    ]);
 
   return {
     uid,
@@ -69,6 +102,10 @@ async function fetchOwnData(uid: string): Promise<OwnData> {
     ),
     messages: messages.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
     lessons: lessons.sort((a, b) => a.startsAt.localeCompare(b.startsAt)),
+    enrollments: enrollments.sort((a, b) =>
+      b.enrolledAt.localeCompare(a.enrolledAt),
+    ),
+    courses,
   };
 }
 
@@ -130,6 +167,8 @@ export default function AccountPanel() {
   const applications = ownData?.applications ?? [];
   const messages = ownData?.messages ?? [];
   const lessons = ownData?.lessons ?? [];
+  const enrollments = ownData?.enrollments ?? [];
+  const courses = ownData?.courses ?? [];
   const isLoadingData = Boolean(user) && !ownData && !fetchError;
   const dataError = fetchError;
 
@@ -243,12 +282,19 @@ export default function AccountPanel() {
         applications={applications}
         lessons={lessons}
         messages={messages}
+        enrollments={enrollments}
         isLoading={isLoadingData}
       />
 
       {/* ── GŁÓWNA SIATKA SEKCJI ── */}
       <div className="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
+          <CoursesList
+            enrollments={enrollments}
+            courses={courses}
+            lessons={lessons}
+            isLoading={isLoadingData}
+          />
           <ApplicationsList applications={applications} isLoading={isLoadingData} />
           <LessonsList lessons={lessons} isLoading={isLoadingData} />
           <MessagesList messages={messages} isLoading={isLoadingData} />

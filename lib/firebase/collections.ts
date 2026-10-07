@@ -16,6 +16,10 @@ export const COLLECTIONS = {
   contactMessages: "contactMessages",
   /** Zaplanowane jazdy i wykłady przypisane do kursanta. */
   lessons: "lessons",
+  /** Katalog kursów oferowanych przez szkołę (wspólny dla wszystkich). */
+  courses: "courses",
+  /** Zapisy (zakupy) kursów powiązane z kontem kursanta przez `userId`. */
+  enrollments: "enrollments",
 } as const;
 
 export type CollectionName = (typeof COLLECTIONS)[keyof typeof COLLECTIONS];
@@ -50,6 +54,12 @@ export type ContactMessageStatus = "nowy" | "odpowiadana" | "zamknieta";
 
 /** Status pojedynczej jazdy / wykładu. */
 export type LessonStatus = "zaplanowane" | "zaliczone" | "odwolane";
+
+/** Status zapisu (zakupu) kursu przez kursanta. */
+export type EnrollmentStatus = "w_realizacji" | "zakonczony" | "anulowany";
+
+/** Grupa katalogowa kursu — odpowiada filtrom na stronie `/categories`. */
+export type CourseGroup = "passenger" | "heavy" | "bus";
 
 /** Typ zajęcia. */
 export type LessonType = "jazda" | "wyklad";
@@ -123,6 +133,124 @@ export interface LessonDoc {
   instructor: string;
   category: string;
   status: LessonStatus;
+}
+
+/**
+ * Kurs z katalogu — dokument `courses/{id}`.
+ *
+ * Wpis jest wspólny dla wszystkich użytkowników (bez pola `userId`) —
+ * to źródło prawdy o ofercie, z którego korzysta panel kursanta
+ * po połączeniu z kolekcją `enrollments`.
+ */
+export interface CourseDoc {
+  id: string;
+  /** Kod kategorii, np. „B”, „C+E”. */
+  code: string;
+  title: string;
+  description: string;
+  group: CourseGroup;
+  /** Identyfikator katalogowy z danych aplikacji, np. `cat-b`. */
+  categoryId: string;
+  /**
+   * Etykieta zgodna z polem `lessons.category` — dzięki temu kurs
+   * można połączyć z zajęciami kursanta (harmonogram jazd).
+   */
+  categoryLabel: string;
+  price: number;
+  installmentFrom: number;
+  /** Czas trwania szkolenia w formacie czytelnym, np. „3,5 miesiąca”. */
+  durationLabel: string;
+  theoryHours: number;
+  practiceHours: number;
+  /** Program kursu (moduły tematyczne). */
+  modules: string[];
+  image: string;
+  imageAlt: string;
+  active: boolean;
+  createdAt: string;
+}
+
+/**
+ * Zapis (zakup) kursu — dokument `enrollments/{id}`.
+ *
+ * Łączy kolekcję `courses` z kontem kursanta: pole `userId` wskazuje
+ * dokument `users/{uid}`, a `courseId` — wpis w katalogu `courses`.
+ * Zapis wyłącznie po stronie serwera (Server Action + Admin SDK).
+ */
+export interface EnrollmentDoc {
+  id: string;
+  /** Czytelny numer zapisu pokazany użytkownikowi, np. ZAP-4821. */
+  reference: string;
+  /** Właściciel zapisu — identyfikator dokumentu `users/{uid}`. */
+  userId: string;
+  courseId: string;
+  /** Skopiowane z katalogu — wyświetlane bez zapytania do `courses`. */
+  courseCode: string;
+  courseTitle: string;
+  /** Kopia `courses.categoryLabel` — połączenie z zajęciami (`lessons`). */
+  categoryLabel: string;
+  price: number;
+  /** Ile rat — 1 oznacza płatność jednorazową. */
+  installments: number;
+  status: EnrollmentStatus;
+  /** Zapisany postęp (0–1) — pomocniczy, gdy brak zajęć do wyliczenia. */
+  progress: number;
+  enrolledAt: string;
+  updatedAt: string;
+  completedAt: string | null;
+}
+
+/** Etykiety statusów zapisów na kurs. */
+export const ENROLLMENT_STATUS_LABEL: Record<EnrollmentStatus, string> = {
+  w_realizacji: "W realizacji",
+  zakonczony: "Zakończony",
+  anulowany: "Anulowany",
+};
+
+/** Kolory (klasy Tailwind) przypisane do statusów zapisów. */
+export const ENROLLMENT_STATUS_CLASS: Record<EnrollmentStatus, string> = {
+  w_realizacji:
+    "bg-blue-500/10 text-blue-700 border-blue-500/30 dark:text-blue-300",
+  zakonczony:
+    "bg-emerald-500/10 text-emerald-700 border-emerald-500/30 dark:text-emerald-300",
+  anulowany:
+    "bg-red-500/10 text-red-600 border-red-500/30 dark:text-red-300",
+};
+
+/**
+ * Podsumowanie jazd powiązanych z kursem (po `categoryLabel` i typie
+ * „jazda”) — służy do wyliczenia postępu i licznika w panelu kursanta.
+ */
+export function summarizeEnrollmentDrives(
+  enrollment: EnrollmentDoc,
+  lessons: LessonDoc[],
+): { completed: number; total: number } {
+  const drives = lessons.filter(
+    (lesson) =>
+      lesson.type === "jazda" && lesson.category === enrollment.categoryLabel,
+  );
+  return {
+    completed: drives.filter((lesson) => lesson.status === "zaliczone").length,
+    total: drives.length,
+  };
+}
+
+/**
+ * Wylicza postęp kursu: na podstawie zaliczonych jazd powiązanych
+ * z kursem (po `categoryLabel`), a gdy ich brak — z zapisanego
+ * w dokumencie pola `progress`.
+ */
+export function computeEnrollmentProgress(
+  enrollment: EnrollmentDoc,
+  lessons: LessonDoc[],
+): number {
+  const { completed, total } = summarizeEnrollmentDrives(enrollment, lessons);
+
+  if (total > 0) {
+    return completed / total;
+  }
+
+  return Math.min(Math.max(enrollment.progress, 0), 1);
 }
 
 /** Etykiety statusów wniosku do wyświetlenia w interfejsie. */

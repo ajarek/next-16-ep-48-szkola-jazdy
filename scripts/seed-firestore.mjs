@@ -159,7 +159,10 @@ for (const [collectionName, documents] of selected) {
       continue;
     }
 
-    await db.collection(collectionName).doc(id).set(data, { merge: false });
+    // Pole `id` zapisujemy w dokumencie — dokumenty tworzone przez
+    // Server Actions również je zawierają, dzięki czemu panel kursanta
+    // może używać identyfikatora jako klucza listy.
+    await db.collection(collectionName).doc(id).set({ ...data, id }, { merge: false });
     written += 1;
     console.log(`  + ${collectionName}/${id}`);
   }

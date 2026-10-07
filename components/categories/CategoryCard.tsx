@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, Clock, GraduationCap, Fuel, ArrowRight } from "lucide-react";
 import { CourseCategory } from "@/lib/categories";
 import { formatPrice } from "@/lib/categories";
+import EnrollButton from "./EnrollButton";
 
 interface CategoryCardProps {
   category: CourseCategory;
@@ -99,14 +100,19 @@ export default function CategoryCard({ category }: CategoryCardProps) {
         ))}
       </ul>
 
-      {/* CTA button */}
-      <div className="px-5 pb-5 mt-auto">
+      {/* CTA: zapis na kurs (Firestore) + formalne zgłoszenie */}
+      <div className="px-5 pb-5 mt-auto space-y-2">
+        <EnrollButton courseId={category.id} />
+
         <Link
           href="/application"
-          className="group/btn flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold shadow-md shadow-blue-700/20 hover:shadow-lg hover:shadow-blue-700/30 hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          className="group/btn flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-border bg-background text-xs font-semibold text-foreground transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         >
-          Zapisz się
-          <ArrowRight className="size-4 group-hover/btn:translate-x-1 transition-transform duration-200" />
+          Formalne zgłoszenie
+          <ArrowRight
+            className="size-3.5 group-hover/btn:translate-x-1 transition-transform duration-200"
+            aria-hidden="true"
+          />
         </Link>
       </div>
     </article>

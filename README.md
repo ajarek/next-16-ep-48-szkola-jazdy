@@ -78,8 +78,16 @@ pomija reguły), a klient może wyłącznie czytać **własne** dokumenty i edyt
 | `applications`    | `applications/{id}` | serwer (Server Action)             | właściciel (`userId`), admin    |
 | `contactMessages` | `contactMessages/{id}` | serwer (Server Action)          | właściciel (`userId`), admin    |
 | `lessons`         | `lessons/{id}`      | serwer / panel administracyjny     | właściciel (`userId`), admin    |
+| `courses`         | `courses/{id}`      | serwer (uzupełnienie) / nasiono     | zalogowany użytkownik, admin    |
+| `enrollments`     | `enrollments/{id}`  | serwer (Server Action)             | właściciel (`userId`), admin    |
 
 Schemat typów i etykiety statusów: `lib/firebase/collections.ts`.
+
+**Powiązanie kursów z kontem:** katalog `courses` jest wspólny dla wszystkich,
+zaś dokument `enrollments/{id}` łączy kurs z kursantem przez pole `userId`
+(wskazujące `users/{uid}`) oraz z ofertą przez `courseId`. Panel kursanta
+łączy obie kolekcje i pokazuje zakupione kursy wraz z postępem wyliczanym
+z zajęć (`lessons.category` = `courses.categoryLabel`).
 
 Przykładowe dokumenty (wraz z opisem placeholderów) znajdują się w
 `public/data/firebase-collections.json` — wykorzystuje je skrypt nasiona:
@@ -111,6 +119,7 @@ app/register/        # rejestracja
 app/account/         # panel kursanta
 app/application/actions.ts  # Server Action: zapis zgłoszenia
 app/contact/actions.ts      # Server Action: zapis wiadomości
+app/categories/actions.ts   # Server Action: zapis na kurs (enrollments)
 ```
 
 ### 5. Przepływ uwierzytelniania
@@ -121,8 +130,12 @@ app/contact/actions.ts      # Server Action: zapis wiadomości
   przekierowanie do `/account` lub strony podanej w parametrze `next`.
 - **Reset hasła**: `sendPasswordResetEmail` (link wysyłany przez Firebase).
 - **Panel** (`/account`): chroniony — brak sesji = przekierowanie do `/login`.
-  Zalogowany użytkownik widzi zgłoszenia, harmonogram jazd, wiadomości
-  i edytuje profil.
+  Zalogowany użytkownik widzi zakupione kursy, zgłoszenia, harmonogram jazd,
+  wiadomości i edytuje profil.
+- **Katalog kursów** (`/categories`): przycisk „Zapisz się na kurs” tworzy
+  zapis (zakup) w kolekcji `enrollments` — dla gościa najpierw otwiera
+  stronę logowania, a po zapisie pokazuje stan posiadania kursu i link
+  do panelu.
 - **Formularze publiczne**: działają także bez logowania; jeśli użytkownik
   jest zalogowany, Server Action dodaje `userId` i wiąże dokument z kontem.
 
