@@ -21,9 +21,11 @@ import {
 } from "react";
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   updateProfile as updateFirebaseProfile,
   type User,
@@ -37,6 +39,7 @@ import {
 } from "@/lib/firebase/client";
 import { COLLECTIONS, type UserProfile } from "@/lib/firebase/collections";
 import { translateFirebaseError } from "@/lib/firebase/errors";
+import { linkApplicationsToUser } from "@/app/application/actions";
 
 /** Wynik operacji uwierzytelniania / edycji profilu. */
 export type AuthActionResult = { ok: true } | { ok: false; message: string };
@@ -67,6 +70,11 @@ interface AuthContextValue {
   configured: boolean;
   register: (input: RegisterInput) => Promise<AuthActionResult>;
   login: (email: string, password: string) => Promise<AuthActionResult>;
+  /** Logowanie przez konto Google (Firebase Auth — provider Google). */
+  loginWithGoogle: (options?: {
+    /** Zgoda zaznaczona w formularzu rejestracji — zapisywana w profilu. */
+    marketingConsent?: boolean;
+  }) => Promise<AuthActionResult>;
   logout: () => Promise<void>;
   sendPasswordReset: (email: string) => Promise<AuthActionResult>;
   updateProfile: (patch: ProfilePatch) => Promise<AuthActionResult>;
@@ -129,6 +137,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Podczas rejestracji profil zapisuje sam formularz — efekt bootstrapu
   // pomija wtedy ten kont dokumentu, aby nie nadpisać danych kursanta.
   const registrationRef = useRef(false);
+  // Zapobiega wielokrotnemu dopisywaniu `userId` do zgłoszeń tego samego
+  // konta w jednej sesji (akcja jest idempotentna, ale pytanie do Firestore
+  // wykonujemy najwyżej raz).
+  const linkedApplicationsUidRef = useRef<string | null>(null);
 
   /* ── Nasłuchiwanie stanu uwierzytelniania ───────────────────── */
   useEffect(() => {
@@ -139,6 +151,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return onAuthStateChanged(getFirebaseAuth(), (nextUser) => {
       setUser(nextUser);
       setLoading(false);
+      // Po wylogowaniu zwalniam blokadę — przy kolejnym logowaniu akcja
+      // dopisująca `userId` do zgłoszeń musi ponownie się uruchomić.
+      if (!nextUser) linkedApplicationsUidRef.current = null;
     });
   }, [configured]);
 
@@ -188,6 +203,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, [configured, user]);
 
+  /* ── Powiązanie zgłoszeń wysłanych przed logowaniem ───────── */
+  useEffect(() => {
+    if (!configured || !user) return;
+    if (linkedApplicationsUidRef.current === user.uid) return;
+    linkedApplicationsUidRef.current = user.uid;
+
+    // Brak `setState` w tym efekcie — zadanie może spokojnie przeżyć
+    // odmontowanie (dwukrotne uruchomienie efektu w trybie deweloperskim).
+    void (async () => {
+      try {
+        const idToken = await user.getIdToken();
+        if (!idToken) return;
+        // Zgłoszenie wysłane przez gościa ma `userId: null` — po zalogowaniu
+        // (lub rejestracji) z tym samym e-mailem dopisujemy je do konta.
+        await withTimeout(linkApplicationsToUser(idToken), 6000);
+      } catch {
+        // Brak sieci albo limit czasu — nie blokujemy sesji; powiązanie
+        // zostanie ponowane przy kolejnej wizycie.
+      }
+    })();
+  }, [configured, user]);
+
   /* ── Operacje ──────────────────────────────────────────────── */
   const login = useCallback(
     async (email: string, password: string): Promise<AuthActionResult> => {
@@ -214,6 +251,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               { merge: true },
             ),
           );
+        } catch {
+          // Profil zostanie uzupełniony przy kolejnej wizycie.
+        }
+        return { ok: true };
+      } catch (error) {
+        return { ok: false, message: translateFirebaseError(error) };
+      }
+    },
+    [configured],
+  );
+
+  const loginWithGoogle = useCallback(
+    async (options?: { marketingConsent?: boolean }): Promise<AuthActionResult> => {
+      if (!configured) {
+        return { ok: false, message: FIREBASE_NOT_CONFIGURED_MESSAGE };
+      }
+      try {
+        const provider = new GoogleAuthProvider();
+        // Wybór konta przy każdej próbie — użytkownik nie „przykleja się”
+        // do konta Google ustawionego w przeglądarce.
+        provider.setCustomParameters({ prompt: "select_account" });
+
+        const credential = await signInWithPopup(getFirebaseAuth(), provider);
+        const profileRef = doc(
+          getFirebaseDb(),
+          COLLECTIONS.users,
+          credential.user.uid,
+        );
+        const consent = options?.marketingConsent === true;
+        const now = new Date().toISOString();
+
+        // Merge aktualizuje wyłącznie `lastLoginAt` — tak jak przy logowaniu
+        // hasłem (reguły Firestore wymagają niezmienności pozostałych pól).
+        // Wyjątek: zgoda zaznaczona przy rejestracji przez Google.
+        try {
+          const snapshot = await withTimeout(getDoc(profileRef));
+          if (!snapshot.exists()) {
+            // Konto utworzone przez Google nie ma jeszcze profilu —
+            // tworzymy go od razu (jak przy rejestracji hasłem).
+            await withTimeout(
+              setDoc(profileRef, {
+                ...buildProfile(credential.user),
+                marketingConsent: consent,
+              }),
+            );
+          } else {
+            await withTimeout(
+              setDoc(
+                profileRef,
+                consent ? { lastLoginAt: now, marketingConsent: true } : { lastLoginAt: now },
+                { merge: true },
+              ),
+            );
+          }
         } catch {
           // Profil zostanie uzupełniony przy kolejnej wizycie.
         }
@@ -336,6 +427,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       configured,
       register,
       login,
+      loginWithGoogle,
       logout,
       sendPasswordReset,
       updateProfile,
@@ -348,6 +440,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       configured,
       register,
       login,
+      loginWithGoogle,
       logout,
       sendPasswordReset,
       updateProfile,

@@ -21,7 +21,17 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   "auth/network-request-failed":
     "Brak połączenia z siecią. Sprawdź swoje internet.",
   "auth/operation-not-allowed":
-    "Logowanie przez e-mail i hasło jest wyłączone w konsoli Firebase (Authentication → Sign-in method).",
+    "Ta metoda logowania jest wyłączona w konsoli Firebase (Authentication → Sign-in method).",
+  "auth/popup-blocked":
+    "Przeglądarka zablokowała okno logowania. Zezwól na wyskakujące okna i spróbuj ponownie.",
+  "auth/popup-closed-by-user":
+    "Okno logowania zostało zamknięte przed ukończeniem. Spróbuj ponownie.",
+  "auth/cancelled-popup-request":
+    "Okno logowania zostało zamknięte przed ukończeniem. Spróbuj ponownie.",
+  "auth/account-exists-with-different-credential":
+    "Konto z tym adresem e-mail już istnieje i używa innej metody logowania. Zaloguj się hasłem, a potem spróbuj ponownie przez Google.",
+  "auth/credential-already-in-use":
+    "To konto Google jest już powiązane z innym kontem w aplikacji.",
   "auth/invalid-api-key":
     "Nieprawidłowy klucz API Firebase — sprawdź zmienne NEXT_PUBLIC_FIREBASE_* w pliku .env.local.",
   "auth/api-key-not-valid.-please-pass-a-valid-api-key":

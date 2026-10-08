@@ -131,3 +131,56 @@ export async function submitApplication(
     };
   }
 }
+
+/**
+ * Server Action: dopisanie `userId` do zgłoszeń wysłanych przez gościa.
+ *
+ * Formularz na `/application` działa także bez logowania, więc dokument może
+ * powstać z `userId: null`. Gdy taki sam adres e-mail zaloguje się później
+ * (lub założy konto), akcja przypisuje wszystkie jego zgłoszenia do konta,
+ * dzięki czemu trafiają do panelu kursanta.
+ *
+ * Wywoływana z `AuthProvider` — bez blokowania logowania. Operacja jest
+ * idempotentna: ponawiane wywołanie nie zmienia dokumentów już powiązanych.
+ */
+export async function linkApplicationsToUser(
+  idToken?: string | null,
+): Promise<{ ok: boolean; linked: number }> {
+  if (!isFirebaseAdminConfigured()) return { ok: false, linked: 0 };
+
+  const author = await verifyUserIdToken(idToken);
+  if (!author?.email) return { ok: false, linked: 0 };
+
+  const email = author.email.trim().toLowerCase();
+  if (!email) return { ok: false, linked: 0 };
+
+  try {
+    const db = getAdminDb();
+    // Pojedynczy filtr równości — Firestore nie wymaga indeksu złożonego.
+    const snapshot = await db
+      .collection(COLLECTIONS.applications)
+      .where("email", "==", email)
+      .get();
+
+    const orphaned = snapshot.docs.filter((document) => {
+      const userId = document.data().userId as string | null | undefined;
+      return userId == null || userId === "";
+    });
+
+    if (orphaned.length === 0) return { ok: true, linked: 0 };
+
+    const batch = db.batch();
+    for (const document of orphaned) {
+      // Nie ruszamy `updatedAt` — to zmiana powiązania, nie treści zgłoszenia.
+      batch.update(document.ref, { userId: author.uid });
+    }
+    await batch.commit();
+
+    return { ok: true, linked: orphaned.length };
+  } catch (error) {
+    console.error("[applications] Błąd dopisywania userId:", error);
+    // Brak powiązania nie blokuje logowania — zostanie ponowione przy
+    // kolejnej wizycie (a historyczne dokumenty naprawi skrypt migracyjny).
+    return { ok: false, linked: 0 };
+  }
+}

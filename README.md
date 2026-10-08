@@ -99,6 +99,15 @@ npm run seed:firestore -- --uid=UID_KURSANTA --collections=applications,lessons
 npm run seed:firestore -- --uid=UID_KURSANTA --dry-run
 ```
 
+Zgłoszenia z `userId: null` (wysłane przed założeniem konta) można uzupełnić
+skryptem migracyjnym — dopasowuje je do kont Firebase Auth po adresie e-mail:
+
+```bash
+npm run backfill:applications -- --dry-run   # podgląd
+npm run backfill:applications                # zapis
+npm run backfill:applications -- --email=kursant@example.com
+```
+
 ### 4. Struktura kodu Firebase
 
 ```
@@ -111,6 +120,7 @@ lib/firebase/
 components/auth/
 ├── AuthProvider.tsx # kontekst uwierzytelniania (hook useAuth)
 ├── AuthForm.tsx     # formularz logowania / rejestracji / resetu hasła
+├── GoogleIcon.tsx   # dekoracyjne logo Google (przycisk logowania)
 └── AuthShell.tsx    # wspólny układ stron uwierzytelniania
 
 components/account/  # panel kursanta (/account)
@@ -128,6 +138,15 @@ app/categories/actions.ts   # Server Action: zapis na kurs (enrollments)
   profilu do `users/{uid}` (rola `kursant`).
 - **Logowanie** (`/login`): `signInWithEmailAndPassword`, po zalogowaniu
   przekierowanie do `/account` lub strony podanej w parametrze `next`.
+- **Logowanie przez Google** (`/login` **i** `/register`): `signInWithPopup`
+  z providrem Google (`provider.setCustomParameters({ prompt: "select_account" })`).
+  Na `/register` przycisk wymaga zaznaczenia zgody (jak rejestracja hasłem),
+  a zapisuje się ona w profilu jako `marketingConsent`.
+  Wymaga włączonej opcji Google w konsoli Firebase
+  (Authentication → Sign-in method) i domeny witryny w
+  Authentication → Settings → Authorized domains. Po zalogowaniu działa
+  to samo przekierowanie `next` oraz automatyczne dopisywanie zgłoszeń
+  (`linkApplicationsToUser`) do konta o tym samym adresie e-mail.
 - **Reset hasła**: `sendPasswordResetEmail` (link wysyłany przez Firebase).
 - **Panel** (`/account`): chroniony — brak sesji = przekierowanie do `/login`.
   Zalogowany użytkownik widzi zakupione kursy, zgłoszenia, harmonogram jazd,
@@ -138,6 +157,9 @@ app/categories/actions.ts   # Server Action: zapis na kurs (enrollments)
   do panelu.
 - **Formularze publiczne**: działają także bez logowania; jeśli użytkownik
   jest zalogowany, Server Action dodaje `userId` i wiąże dokument z kontem.
+  Zgłoszenie wysłane przez gościa (`userId: null`) jest dopisywane do konta
+  automatycznie przy kolejnym logowaniu / rejestracji z tym samym adresem
+  e-mail (akcja `linkApplicationsToUser`, wywoływana przez `AuthProvider`).
 
 ### 6. Emulatory (praca lokalna bez produkcyjnych danych)
 
@@ -179,7 +201,7 @@ app/                  # trasy App Router (strony, akcje serwera, SEO)
 components/           # komponenty UI (Navbar, sekcje, auth, panel kursanta)
 lib/                  # logika domenowa, schematy Zod, Firebase
 public/data/          # przykładowe dane (katalogi, schematy kolekcji)
-scripts/              # skrypty narzędziowe (nasiono Firestore)
+scripts/              # skrypty narzędziowe (nasiono i migracje Firestore)
 firestore.rules       # reguły bezpieczeństwa Firestore
 firebase.json          # konfiguracja Firebase CLI (reguły, emulatory)
 ```

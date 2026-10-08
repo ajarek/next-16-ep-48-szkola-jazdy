@@ -89,7 +89,12 @@ export interface ApplicationDoc {
   id: string;
   /** Czytelny numer referencyjny pokazany użytkownikowi, np. APX-4821. */
   reference: string;
-  /** `null` dla zgłoszeń wysłanych przez gościa (bez logowania). */
+  /**
+   * `null` dla zgłoszeń wysłanych przez gościa (bez logowania).
+   * Wartość jest dopisywana automatycznie przy logowaniu / rejestracji
+   * z tym samym adresem e-mail, a dokumenty historyczne naprawia skrypt
+   * `npm run backfill:applications`.
+   */
   userId: string | null;
   fullName: string;
   age: string;

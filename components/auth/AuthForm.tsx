@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail, Phone, User } from "lucide-react";
 import { useAuth } from "./AuthProvider";
+import GoogleIcon from "./GoogleIcon";
 import { FIREBASE_NOT_CONFIGURED_MESSAGE } from "@/lib/firebase/client";
 
 type AuthMode = "login" | "register";
@@ -33,7 +34,8 @@ function safeNextPath(): string {
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
-  const { user, configured, loading, login, register, sendPasswordReset } = useAuth();
+  const { user, configured, loading, login, loginWithGoogle, register, sendPasswordReset } =
+    useAuth();
 
   const [displayName, setDisplayName] = useState("");
   const [phone, setPhone] = useState("");
@@ -135,6 +137,31 @@ export default function AuthForm({ mode }: AuthFormProps) {
       }
       // Przy rejestracji nastąpuje automatyczne zalogowanie, co spowoduje
       // przekierowanie przez efekt nasłuchujący stanu uwierzytelniania.
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setNotice(null);
+    setErrors({});
+
+    // Przy rejestracji zgoda jest tak samo wymagana jak przy kontach z hasłem.
+    if (mode === "register" && !consent) {
+      setErrors({ consent: "Zaznacz zgodę, aby założyć konto przez Google." });
+      document.getElementById("consent")?.focus();
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const result = await loginWithGoogle({ marketingConsent: consent });
+      if (!result.ok) {
+        setNotice({ tone: "error", text: result.message });
+        return;
+      }
+      router.push(safeNextPath());
+      router.refresh();
     } finally {
       setIsSubmitting(false);
     }
@@ -264,6 +291,31 @@ export default function AuthForm({ mode }: AuthFormProps) {
               ? "Użyj adresu e-mail podanego przy zapisie na kurs."
               : "Konto utworzysz w mniej niż minutę — bez opłat."}
           </p>
+
+          {/* Logowanie / rejestracja przez konto Google */}
+          <>
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              disabled={isSubmitting || !configured}
+              className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl border border-border bg-background py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              <GoogleIcon className="size-4 shrink-0" />
+              <span>
+                {isSubmitting
+                  ? "Łączenie z Google…"
+                  : isLogin
+                    ? "Zaloguj się przez Google"
+                    : "Załóż konto przez Google"}
+              </span>
+            </button>
+
+            <div className="my-4 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <span className="h-px flex-1 bg-border" aria-hidden="true" />
+              <span>lub</span>
+              <span className="h-px flex-1 bg-border" aria-hidden="true" />
+            </div>
+          </>
 
           <form className="mt-6 space-y-4" onSubmit={handleSubmit} noValidate>
             {mode === "register" ? (
@@ -448,6 +500,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
                 <div>
                   <label className="flex items-start gap-3 text-xs leading-relaxed text-muted-foreground">
                     <input
+                      id="consent"
                       type="checkbox"
                       checked={consent}
                       onChange={(event) => {
