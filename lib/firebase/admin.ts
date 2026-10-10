@@ -121,6 +121,8 @@ export function getAdminDb(): Firestore {
 export interface VerifiedUser {
   uid: string;
   email: string | null;
+  /** Własny claim `admin: true` w tokenie ID (nadawany przez Admin SDK). */
+  admin: boolean;
 }
 
 /**
@@ -134,7 +136,11 @@ export async function verifyUserIdToken(
 
   try {
     const decoded = await getAdminAuth().verifyIdToken(idToken);
-    return { uid: decoded.uid, email: decoded.email ?? null };
+    return {
+      uid: decoded.uid,
+      email: decoded.email ?? null,
+      admin: decoded.admin === true,
+    };
   } catch {
     return null;
   }

@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import { useTheme } from "./ThemeProvider"
 import { useAuth } from "./auth/AuthProvider"
+import { isAdminEmail } from "@/lib/dashboard"
 
 interface NavLink {
   label: string
@@ -30,6 +31,10 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { toggleTheme } = useTheme()
   const { user, logout } = useAuth()
+
+  // Dostęp do panelu administracyjnego wyłącznie dla konta szkoły
+  // (sprawdzane ponownie po stronie serwera w Server Action).
+  const isBoardAdmin = isAdminEmail(user?.email)
 
   // Inicjały wyświetlane na awatarze zalogowanego kursanta
   const initials = (() => {
@@ -107,6 +112,16 @@ export default function Navbar() {
                 className='hover:text-foreground transition-colors relative py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md'
               >
                 Moje konto
+              </Link>
+            ) : null}
+
+            {/* Odnośnie widoczny wyłącznie dla konta administracyjnego */}
+            {isBoardAdmin ? (
+              <Link
+                href='/dashboard'
+                className='hover:text-foreground transition-colors relative py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md'
+              >
+                Panel admina
               </Link>
             ) : null}
           </nav>
@@ -231,6 +246,18 @@ export default function Navbar() {
                 <ChevronRight className='size-4 text-muted-foreground' />
               </Link>
             ))}
+
+            {/* Panel administracyjny w menu mobilnym */}
+            {isBoardAdmin ? (
+              <Link
+                href='/dashboard'
+                onClick={() => setIsMobileMenuOpen(false)}
+                className='flex items-center justify-between px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-muted transition-colors'
+              >
+                <span>Panel admina</span>
+                <ChevronRight className='size-4 text-muted-foreground' />
+              </Link>
+            ) : null}
 
             {/* Konto kursanta w menu mobilnym */}
             {user ? (
